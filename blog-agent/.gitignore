@@ -1,0 +1,11 @@
+**/node_modules/
+**/.git/
+**/.sites-runtime/
+**/.build-staging/
+**/.build-staging-*/
+**/dist/
+*.tar.gz
+*.log
+.env
+.env.*
+!.env.example
