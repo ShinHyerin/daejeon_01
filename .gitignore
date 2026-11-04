@@ -1,0 +1,30 @@
+# Environment files and credentials
+.env*
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+secrets
+secrets.*
+credentials.json
+credentials.*
+
+# Git metadata, generated output and local runtime files
+**/.git/
+**/node_modules/
+**/.sites-runtime/
+**/.build-staging/
+**/.build-staging-*/
+**/dist/
+*.tar.gz
+*.log
+
+# Files rejected for public upload during the security review
+/blog-agent/AGENTS.md
+/blog-agent/.agents/skills/uracle-blog/references/sources.md
+/blog-agent/docs/2026-11-02-progress.md
+/blog-agent/docs/2026-11-02-sources.md
+/blog-agent/docs/2026-11-03-progress.md
+/blog-agent/docs/2026-11-03-sources.md
