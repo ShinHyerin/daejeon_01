@@ -18,7 +18,7 @@
 
 사용자가 이 블로그 에이전트 프로젝트에서 **“커밋”**이라고 요청하면, 마지막 GitHub 반영 이후의 프로젝트 변경과 진행 내용을 확인하고 Conventional Commits 형식의 제목과 설명 본문을 갖춘 커밋을 만들어 GitHub에 반영한다. 별도의 반복 승인을 요구하지 않는다. 사용자가 초안·로컬 커밋 등 범위를 따로 지정하면 그 지시를 따른다.
 
-- 대상 로컬 루트: `C:/Users/ASUS/Documents/ChatGPT/블로그 에이전트`.
+- 대상 로컬 루트: `C:/Users/USER/Documents/ChatGPT/블로그 에이전트`.
 - 대상 저장소: `ShinHyerin/daejeon_01`, 기본 브랜치: `main`, 허용 경로: `blog-agent/` 아래만.
 - 이 명령의 권한을 다른 프로젝트·저장소·저장소 루트 파일에 적용하지 않는다. 변경 목록과 커밋 diff가 모두 `blog-agent/` 아래인지 확인한다.
 - 실제 변경에 맞게 `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore` 등을 고르고 `type(scope): description`을 사용한다. 본문에는 무엇을 왜 바꿨는지, 확인한 테스트·빌드와 한계를 적는다. 서로 독립적인 변경은 필요하면 커밋을 나눈다.
