@@ -1,0 +1,12 @@
+# 환경 파일·인증 자료
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+secrets
+secrets.*
+credentials.*
