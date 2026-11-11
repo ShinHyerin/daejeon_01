@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>코드 에이전트 팀</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: 다크 네이비 · 섹션 스크롤 · 카드 그리드 */
+:root{
+  --bg:#0a0c13; --bg2:#0f1220; --panel:#131728; --panel2:#181d33; --line:#252c45; --line2:#323a5a;
+  --text:#e9ecf5; --muted:#8f97ad; --dim:#6a7290; --accent:#8aa4ff; --ink:#0a0c13;
+  --ok:#4ade80; --warn:#fbbf24; --bad:#f87171;
+  --c-main:#ffffff; --c-exp:#38bdf8; --c-rev:#f87171; --c-cut:#5d6580;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --sans:'Noto Sans KR',system-ui,sans-serif;
+  --radius:14px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.86em;background:#ffffff0c;padding:1px 6px;border-radius:5px}
+::selection{background:#8aa4ff55}
+
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;gap:20px;padding-block:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:linear-gradient(var(--bg),#0a0c13dd);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+nav.top .brand{font-weight:900;letter-spacing:-.02em;display:flex;align-items:center;gap:10px;white-space:nowrap}
+nav.top .brand i{width:10px;height:10px;border-radius:50%;background:var(--c-main);box-shadow:0 0 12px var(--c-main)}
+nav.top ul{display:flex;gap:2px;list-style:none;margin:0 0 0 auto;padding:0;overflow-x:auto;scrollbar-width:none}
+nav.top a{text-decoration:none;font-size:13px;color:var(--muted);padding:6px 10px;border-radius:999px;white-space:nowrap}
+nav.top a:hover{color:var(--text);background:#ffffff12}
+
+section{padding-block:96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1180px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:12px}
+h2{font-size:clamp(26px,4vw,42px);line-height:1.22;letter-spacing:-.03em;margin:0 0 14px;font-weight:900;text-wrap:balance}
+.lead{color:var(--muted);font-size:16.5px;max-width:700px;margin:0 0 40px}
+.note{font-size:12px;color:var(--dim);font-family:var(--mono);margin-top:18px}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;padding:1px 7px;border-radius:6px;border:1px solid currentColor;line-height:1.6;white-space:nowrap}
+.t-ok{color:var(--ok)}.t-inf{color:var(--accent)}.t-unk{color:var(--muted)}.t-bad{color:var(--bad)}.t-warn{color:var(--warn)}
+
+/* hero */
+#hero{max-width:none;padding-block:110px 90px;text-align:center;position:relative;overflow:hidden}
+#hero::before{content:"";position:absolute;inset:-30% 10% auto;height:520px;background:radial-gradient(ellipse at center,#1c2448 0%,transparent 65%);pointer-events:none}
+.hero-copy{position:relative}
+.hero-copy h1{font-size:clamp(38px,6.6vw,84px);line-height:1.06;letter-spacing:-.045em;margin:0 0 20px;font-weight:900;text-wrap:balance}
+.hero-copy h1 span{background:linear-gradient(90deg,var(--c-exp),var(--accent) 50%,var(--c-rev));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-copy p{color:var(--muted);font-size:clamp(15px,1.6vw,18px);margin:0 auto 30px;max-width:600px}
+.hero-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.hero-stats div{background:#ffffff0a;border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:14px}
+.hero-stats b{font-family:var(--mono);margin-right:6px}
+
+/* principles */
+.principles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.pr{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;position:relative;overflow:hidden}
+.pr .n{font-family:var(--mono);color:var(--dim);font-size:12px}
+.pr h3{margin:8px 0;font-size:18px}
+.pr p{margin:0;color:var(--muted);font-size:14px}
+.pr .from{margin-top:12px;font-size:12px;color:var(--dim)}
+.pr::after{content:"";position:absolute;right:-60px;bottom:-80px;width:200px;height:200px;border-radius:50%;background:radial-gradient(var(--glow,#8aa4ff33),transparent 70%)}
+
+/* org */
+.org{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:22px;align-items:start}
+.agents{display:grid;gap:12px}
+.ag{--c:#fff;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:14px;align-items:center;transition:transform .25s,border-color .25s,box-shadow .25s}
+.ag:hover,.ag.sel{transform:translateY(-2px);border-color:var(--c);box-shadow:0 10px 36px -14px var(--c)}
+.ag .dot{width:42px;height:42px;border-radius:11px;background:color-mix(in srgb,var(--c) 16%,transparent);border:1px solid color-mix(in srgb,var(--c) 60%,transparent);display:grid;place-items:center;font-family:var(--mono);font-size:12px;color:var(--c);font-weight:600}
+.ag h4{margin:0;font-size:16px}
+.ag .en{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.ag p{margin:4px 0 0;font-size:13px;color:var(--muted);line-height:1.5}
+.ag .when{font-family:var(--mono);font-size:11px;color:var(--c);border:1px solid color-mix(in srgb,var(--c) 50%,transparent);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.cut{margin-top:6px;background:transparent;border:1px dashed var(--line2);border-radius:var(--radius);padding:16px 20px}
+.cut h5{margin:0 0 8px;font-size:13px;color:var(--muted);font-weight:500}
+.cut ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.cut li{font-size:13px;color:var(--dim);text-decoration:line-through;background:#ffffff06;border:1px solid var(--line);border-radius:999px;padding:3px 12px}
+.detail{position:sticky;top:80px;background:linear-gradient(160deg,#1c2240,#121628);border:1px solid var(--line2);border-radius:var(--radius);padding:24px;min-width:0}
+.detail .badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-family:var(--mono);color:var(--muted)}
+.detail .badge i{width:9px;height:9px;border-radius:50%;background:var(--dc,#fff);box-shadow:0 0 10px var(--dc,#fff)}
+.detail h4{margin:10px 0 2px;font-size:21px}
+.detail dl{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px 12px;margin:16px 0 0;font-size:13.5px}
+.detail dt{color:var(--dim)}
+.detail dd{margin:0}
+
+/* routing */
+.picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.req{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;transition:.2s}
+.req:hover{border-color:var(--line2)}
+.req.on{background:var(--text);color:var(--ink);border-color:var(--text)}
+.req .k{font-family:var(--mono);font-size:11px;opacity:.7}
+.req q{display:block;margin-top:6px;font-size:14.5px;quotes:"“" "”"}
+.route{background:radial-gradient(ellipse at top,#161b33 0%,var(--bg2) 70%);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.route .title{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;margin-bottom:18px}
+.route .title b{font-size:18px}
+.route .title span{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;list-style:none;margin:0;padding:0}
+.flow li{display:flex;align-items:center;gap:8px}
+.flow li+li::before{content:"→";color:var(--dim);font-family:var(--mono)}
+.step{--c:#fff;border:1px solid color-mix(in srgb,var(--c) 55%,transparent);background:color-mix(in srgb,var(--c) 10%,transparent);border-radius:10px;padding:8px 12px;font-size:13.5px;animation:pop .4s ease both}
+.step small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--c);opacity:.9}
+@keyframes pop{from{opacity:.3;transform:translateY(6px)}to{opacity:1;transform:none}}
+.route p{margin:18px 0 0;color:var(--muted);font-size:14px}
+
+/* explore */
+.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.col{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.col h3{margin:0 0 12px;font-size:16px;display:flex;gap:8px;align-items:center}
+.col ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px}
+.col li{margin:6px 0}
+.col li b{color:var(--text);font-weight:500}
+.rule{margin-top:14px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.ctx{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.ctx h4{margin:0 0 4px;font-size:14px}
+.ctx .sub{font-size:12.5px;color:var(--muted);margin-bottom:14px}
+.blocks{display:flex;flex-wrap:wrap;gap:4px}
+.blocks i{width:18px;height:18px;border-radius:4px;background:var(--line2)}
+.blocks i.waste{background:color-mix(in srgb,var(--bad) 45%,transparent)}
+.blocks i.use{background:var(--ok)}
+.blocks i.sum{background:var(--c-exp)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.callout{margin-top:14px;border:1px solid var(--line2);border-radius:var(--radius);padding:18px 20px;background:linear-gradient(90deg,#1a2040,var(--panel));font-size:15px}
+.callout b{color:var(--c-exp)}
+
+/* compare */
+.cmp{display:grid;gap:14px}
+.bar-row{display:grid;grid-template-columns:200px minmax(0,1fr) 70px;gap:14px;align-items:center}
+.bar-row .lab{font-size:14px}
+.bar-row .lab small{display:block;color:var(--dim);font-size:12px}
+.track{height:30px;background:var(--bg2);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex}
+.track span{height:100%;border-right:1px solid var(--bg)}
+.track .w{background:color-mix(in srgb,var(--accent) 60%,transparent)}
+.track .r{background:color-mix(in srgb,var(--bad) 60%,transparent)}
+.track .e{background:color-mix(in srgb,var(--c-exp) 60%,transparent)}
+.bar-row .num{font-family:var(--mono);font-size:14px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* review */
+.docs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.doc{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:0}
+.doc header{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.doc header b{font-size:15px}
+.doc header small{display:block;font-family:var(--mono);font-size:11px;color:var(--dim)}
+.doc .body{padding:16px 18px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--dim);font-size:12px}
+td code{white-space:nowrap}
+.rows{display:grid;gap:10px;font-size:13.5px}
+.rows div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px}
+.rows dt{color:var(--dim)}
+.rows dd{margin:0}
+
+/* tips */
+.tips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.tip{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.tip h4{margin:0 0 6px;font-size:15px}
+.tip p{margin:0;color:var(--muted);font-size:13.5px}
+.learn{margin-top:22px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;font-family:var(--mono);font-size:13px;color:var(--muted);overflow-x:auto}
+.learn .h{color:var(--text);margin-bottom:8px}
+.learn div{white-space:nowrap}
+
+footer{padding-block:40px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));text-align:center;color:var(--dim);font-size:13px;border-top:1px solid var(--line)}
+
+@media (max-width:900px){
+  .principles,.tips{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .org{grid-template-columns:minmax(0,1fr)}
+  .detail{position:static}
+}
+@media (max-width:620px){
+  section{padding-block:68px}
+  .principles,.tips,.picker,.split,.rule,.docs{grid-template-columns:minmax(0,1fr)}
+  .ag{grid-template-columns:42px minmax(0,1fr)}
+  .ag .when{grid-column:2;justify-self:start}
+  .bar-row{grid-template-columns:minmax(0,1fr) 56px}
+  .bar-row .track{grid-column:1 / -1;grid-row:2}
+  nav.top ul{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="brand"><i></i>코드 에이전트 팀</div>
+  <ul>
+    <li><a href="#org">조직</a></li>
+    <li><a href="#route">경로</a></li>
+    <li><a href="#explore">탐색 기준</a></li>
+    <li><a href="#compare">비교</a></li>
+    <li><a href="#review">검수</a></li>
+    <li><a href="#tips">절약</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">AI Agent Organization · Code</div>
+    <h1>한 명이 짜고,<br><span>한 명이 본다</span></h1>
+    <p>기획·프론트엔드·백엔드·검수로 에이전트를 나누는 대신, 메인 하나가 한 맥락에서 코드를 짜고 검수자는 새 눈으로 diff만 봅니다. 품질은 규칙, 요구사항 추적, 학습 기록으로 지킵니다.</p>
+    <div class="hero-stats">
+      <div><b>1</b>메인 에이전트</div>
+      <div><b>2</b>보조 에이전트</div>
+      <div><b>1~3</b>기능당 호출</div>
+      <div><b>3</b>요청 경로</div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="eyebrow">How it works</div>
+  <h2>팀이 굴러가는 네 가지 원리</h2>
+  <p class="lead">서브에이전트는 부를 때마다 맥락 없이 새로 시작합니다. 그래서 호출 수가 곧 비용입니다. 효과가 큰 규칙만 남기고 호출은 꼭 필요한 곳에만 둡니다.</p>
+  <div class="principles">
+    <div class="pr" style="--glow:#ffffff22"><div class="n">01</div><h3>맥락은 이어 간다</h3><p>기획부터 프론트·백엔드·테스트까지 메인이 한 맥락에서 진행합니다. API 계약을 양쪽이 같이 알고 있어야 하기 때문입니다.</p><div class="from">예: API 응답 형식을 바꾸면 같은 맥락에서 프론트 타입도 바로 수정</div></div>
+    <div class="pr" style="--glow:#f8717133"><div class="n">02</div><h3>남이 검토한다</h3><p>작성 과정을 모르는 검수자를 새로 불러 diff를 봅니다. 작성자가 자기 코드를 검토하지 않습니다.</p><div class="from">예: PR 리뷰어처럼 변경분과 테스트 결과만 받음</div></div>
+    <div class="pr" style="--glow:#4ade8033"><div class="n">03</div><h3>요구사항으로 이어진다</h3><p>요구사항에 R1, R2 번호를 붙이고, 어떤 코드와 테스트로 충족됐는지 적습니다.</p><div class="from">예: R1 → LoginForm.tsx:58 → test_login.py 통과</div></div>
+    <div class="pr" style="--glow:#38bdf833"><div class="n">04</div><h3>필요할 때만 부른다</h3><p>요청 크기에 따라 경로가 달라집니다. 작은 수정에는 아무도 부르지 않습니다.</p><div class="from">예: 오타 0회 · 기능 하나 1회 · 큰 작업 3회</div></div>
+  </div>
+</section>
+
+<section id="org">
+  <div class="eyebrow">Organization</div>
+  <h2>누가 무엇을 맡나</h2>
+  <p class="lead">카드를 누르면 오른쪽에 하는 일, 받는 입력, 돌려주는 결과, 권한이 표시됩니다.</p>
+  <div class="org">
+    <div>
+      <div class="agents" id="agents"></div>
+      <div class="cut">
+        <h5>역할 분리형 구조에서 뺀 것</h5>
+        <ul>
+          <li>기획 에이전트</li><li>프론트엔드 에이전트</li><li>백엔드 에이전트</li><li>단계별 교차 검토</li><li>에이전트 간 인수인계서</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="detail" id="detail" aria-live="polite"></aside>
+  </div>
+</section>
+
+<section id="route">
+  <div class="eyebrow">Rules</div>
+  <h2>요청에 따라 경로가 달라진다</h2>
+  <p class="lead">요청을 골라 보세요. 몇 번 호출하는지와 어떤 순서로 진행하는지가 바뀝니다.</p>
+  <div class="picker" id="picker"></div>
+  <div class="route" id="routeBox"></div>
+</section>
+
+<section id="explore">
+  <div class="eyebrow">Explore agent</div>
+  <h2>탐색 에이전트는 언제 부르나</h2>
+  <p class="lead">기준은 저장소 크기보다 <b>관련 코드를 찾으려면 나중에 필요 없는 파일까지 많이 읽어야 하는가</b>입니다.</p>
+  <div class="split">
+    <div class="col">
+      <h3><span class="tag t-unk">불필요</span>메인이 바로 찾는다</h3>
+      <ul>
+        <li><b>파일 수십 개</b>인 개인 프로젝트, 토이 앱</li>
+        <li>Next.js 블로그, 간단한 FastAPI 서버처럼 <b>구조가 뻔한</b> 프로젝트</li>
+        <li>"<code>LoginForm.tsx</code>에 비밀번호 확인 칸 추가"처럼 <b>위치가 정해진</b> 요청</li>
+        <li>검색 한두 번으로 관련 파일이 나오는 경우</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3><span class="tag" style="color:var(--c-exp)">필요</span>탐색 에이전트를 부른다</h3>
+      <ul>
+        <li><b>파일 수백~수천 개</b>인 모노레포 (<code>apps/</code>, <code>packages/</code>, <code>services/</code>)</li>
+        <li>"결제 실패하면 어디서 재시도하지?"처럼 <b>흐름을 따라가야</b> 하는 질문</li>
+        <li>처음 받은 오픈소스나 <b>남이 만든 레거시</b> 코드</li>
+        <li>"이 함수를 바꾸면 영향받는 곳 전부"처럼 <b>호출처가 흩어진</b> 경우</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rule">
+    <div class="ctx">
+      <h4>메인이 직접 찾을 때</h4>
+      <div class="sub">헛짚은 파일까지 메인 맥락에 계속 남음</div>
+      <div class="blocks" aria-label="파일 22개 중 20개가 낭비, 2개가 사용">
+        <i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="waste"></i><i class="use"></i><i class="use"></i>
+      </div>
+    </div>
+    <div class="ctx">
+      <h4>탐색 에이전트를 쓸 때</h4>
+      <div class="sub">메인에는 요약 한 줄과 필요한 파일만 들어옴</div>
+      <div class="blocks" aria-label="요약 1개와 필요한 파일 2개">
+        <i class="sum"></i><i class="use"></i><i class="use"></i>
+      </div>
+    </div>
+  </div>
+  <div class="legend"><span><i style="background:color-mix(in srgb,var(--bad) 45%,transparent)"></i>헛짚은 파일</span><span><i style="background:var(--ok)"></i>실제로 고칠 파일</span><span><i style="background:var(--c-exp)"></i>탐색 요약</span></div>
+  <div class="callout">간단한 기준: <b>검색 2~3번으로 위치가 안 나오면</b> 탐색 에이전트를 부른다. 돌려받는 답 예시 → <code>재시도: services/payment/retry.ts:42 · 설정: config/queue.yaml</code></div>
+</section>
+
+<section id="compare">
+  <div class="eyebrow">Cost</div>
+  <h2>기능 하나를 만들 때의 호출 수</h2>
+  <p class="lead">서브에이전트는 호출할 때마다 지침, 요구사항, 관련 파일을 다시 읽습니다. 호출 수가 줄면 같은 파일을 반복해서 읽는 비용도 줄어듭니다.</p>
+  <div class="cmp">
+    <div class="bar-row"><div class="lab">역할 분리형<small>기획·프론트·백엔드·검수, 단계마다 검토</small></div><div class="track" aria-hidden="true"><span class="w" style="width:13.3%"></span><span class="r" style="width:13.3%"></span></div><div class="num">8회</div></div>
+    <div class="bar-row"><div class="lab">세분화형<small>기획·설계·UI·API·DB·테스트·문서·배포 8 + 단계 검토 7</small></div><div class="track" aria-hidden="true"><span class="w" style="width:26.7%"></span><span class="r" style="width:23.3%"></span></div><div class="num">15회</div></div>
+    <div class="bar-row"><div class="lab">축소안 · 기능 하나<small>메인 + 검수 1</small></div><div class="track" aria-hidden="true"><span class="r" style="width:3.33%"></span></div><div class="num">1회</div></div>
+    <div class="bar-row"><div class="lab">축소안 · 큰 작업<small>탐색 1 + 검수 2</small></div><div class="track" aria-hidden="true"><span class="e" style="width:3.33%"></span><span class="r" style="width:6.67%"></span></div><div class="num">3회</div></div>
+  </div>
+  <div class="legend"><span><i style="background:color-mix(in srgb,var(--accent) 60%,transparent)"></i>작업 호출</span><span><i style="background:color-mix(in srgb,var(--bad) 60%,transparent)"></i>검토 호출</span><span><i style="background:color-mix(in srgb,var(--c-exp) 60%,transparent)"></i>탐색 호출</span></div>
+  <div class="note">※ 막대 하나 = 30회 기준. 서브에이전트 호출 수만 센 개념 비교이며 실측 토큰이 아닙니다. 역할 분리형은 작업 4 + 검토 4로 가정했습니다.</div>
+</section>
+
+<section id="review">
+  <div class="eyebrow">Trace &amp; Review</div>
+  <h2>요구사항 추적표와 검수 양식</h2>
+  <p class="lead">메인은 요구사항 추적표를 남기고, 검수자는 정해진 양식으로 판정합니다. 검수자에게는 요구사항, diff, 테스트 결과만 넘깁니다.</p>
+  <div class="docs">
+    <div class="doc">
+      <header><div><b>요구사항 추적표</b><small>docs/trace.md · 작성: 메인</small></div></header>
+      <div class="body">
+        <table>
+          <thead><tr><th>ID</th><th>요구사항</th><th>코드</th><th>근거</th></tr></thead>
+          <tbody>
+            <tr><td>R1</td><td>비밀번호 확인 불일치 시 제출 막기</td><td><code>LoginForm.tsx:58</code></td><td><span class="tag t-ok">[확인]</span> 테스트 통과</td></tr>
+            <tr><td>R2</td><td>API가 400과 오류 메시지 반환</td><td><code>auth/routes.py:31</code></td><td><span class="tag t-ok">[확인]</span> 테스트 통과</td></tr>
+            <tr><td>R3</td><td>기존 소셜 로그인 영향 없음</td><td>—</td><td><span class="tag t-inf">[추론]</span> 코드만 읽음</td></tr>
+            <tr><td>R4</td><td>모바일 레이아웃 유지</td><td>—</td><td><span class="tag t-unk">[미확인]</span> 실기기 미확인</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="doc">
+      <header><div><b>검수 결과</b><small>reviews/login-confirm.md · 검수자: reviewer</small></div><span class="tag t-warn">수정 후 통과</span></header>
+      <div class="body">
+        <dl class="rows">
+          <div><dt>종합 판정</dt><dd>통과 / 수정 후 통과 / 재작업 + 한 줄 이유</dd></div>
+          <div><dt>지적 사항</dt><dd><code>auth/routes.py:31</code> · 빈 문자열이 검증을 통과함 · 대안: 길이 검사 추가</dd></div>
+          <div><dt>잘된 점</dt><dd>프론트와 백엔드 오류 메시지가 일치함</dd></div>
+          <div><dt>못 본 범위</dt><dd><span class="tag t-unk">[미확인]</span> 숨기지 않고 적음 (R4 모바일)</dd></div>
+          <div><dt>재검수</dt><dd>고친 줄만 다시 봄</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <div class="note">※ 위 표와 판정은 양식을 보여 주기 위한 예시입니다.</div>
+</section>
+
+<section id="tips">
+  <div class="eyebrow">Token saving</div>
+  <h2>토큰을 아끼는 장치</h2>
+  <p class="lead">구조를 줄인 다음, 남은 호출 하나하나를 가볍게 만듭니다.</p>
+  <div class="tips">
+    <div class="tip"><h4>검토는 되돌리기 비싼 곳에서만</h4><p>기본은 구현 후 1번입니다. 큰 작업일 때만 설계 후에 1번 더 합니다.</p></div>
+    <div class="tip"><h4>보조 에이전트는 싼 모델로</h4><p>탐색과 검수는 더 가벼운 모델로 돌립니다.</p></div>
+    <div class="tip"><h4>diff만 넘긴다</h4><p>검수자에게 저장소 전체를 주지 않습니다. 요구사항, diff, 테스트 결과면 충분합니다.</p></div>
+    <div class="tip"><h4>재검수는 고친 부분만</h4><p>지적받은 줄만 다시 보내고, 통과한 부분은 다시 보지 않습니다.</p></div>
+    <div class="tip"><h4>실패 로그만</h4><p>테스트 로그는 전체 대신 실패한 부분만 넘깁니다.</p></div>
+    <div class="tip"><h4>돌려받는 답은 짧게</h4><p>PR 설명처럼 변경 파일, 핵심 결정 3줄, 미해결 사항만 받습니다.</p></div>
+  </div>
+  <div class="learn">
+    <div class="h">learnings.md · 작업이 끝날 때 한 줄, 다음 작업 설계 때 먼저 읽음 (예시)</div>
+    <div>| 로그인 확인칸 | 잘된 것: 검수 1회로 빈 문자열 버그 발견 | 다음에 바꿀 것: 입력 검증은 프론트·백엔드 둘 다 테스트 |</div>
+    <div>| 결제 재시도   | 잘된 것: 탐색 요약으로 파일 3개만 읽음   | 다음에 바꿀 것: 큐 설정 파일 위치를 CLAUDE.md에 기록   |</div>
+  </div>
+</section>
+
+<footer>코드 에이전트 팀 · 메인 1 + 탐색 + 검수 · 공통 규칙 <code>CLAUDE.md</code> · 학습 <code>learnings.md</code></footer>
+
+<script>
+const AG=[
+ {id:'main',k:'M',name:'메인',en:'main · director + developer',c:'var(--c-main)',when:'항상',
+  short:'요구사항 정리부터 설계, 프론트·백엔드 구현, 테스트까지 한 맥락에서 진행',
+  role:'요구사항 정리 → 설계 → 프론트·백엔드 구현 → 테스트 실행 → 최종 보고',
+  input:'사용자 요청, CLAUDE.md, learnings.md',
+  output:'코드 변경, 요구사항 추적표, 최종 보고',
+  perm:'읽기·쓰기·실행 전부. 서브에이전트를 부를 수 있는 유일한 자리'},
+ {id:'exp',k:'EX',name:'탐색 에이전트',en:'explore · read-only',c:'var(--c-exp)',when:'큰 저장소일 때만',
+  short:'관련 파일과 흐름을 찾아 요약만 돌려줌. 헛짚은 파일은 이쪽에서 버려짐',
+  role:'관련 파일 위치, 호출 흐름, 영향 범위 찾기',
+  input:'찾을 대상 한 문장과 탐색 깊이',
+  output:'파일:줄 목록과 3줄 요약',
+  perm:'읽기 전용. 더 가벼운 모델 사용'},
+ {id:'rev',k:'RV',name:'검수 에이전트',en:'reviewer · read-only',c:'var(--c-rev)',when:'구현 후 1번',
+  short:'작성 과정을 모르는 새 눈으로 diff를 보고 버그·보안·누락을 지적',
+  role:'버그, 보안, 요구사항 누락, 테스트 빈틈 지적',
+  input:'요구사항 추적표, diff, 테스트 결과',
+  output:'판정과 파일:줄별 지적, 못 본 범위',
+  perm:'읽기 전용. 결과는 텍스트로 반환하고 메인이 reviews/에 저장'}
+];
+const box=document.getElementById('agents'),det=document.getElementById('detail');
+function showAg(id){
+  const a=AG.find(x=>x.id===id);
+  box.querySelectorAll('.ag').forEach(b=>{b.classList.toggle('sel',b.dataset.id===id);b.setAttribute('aria-pressed',b.dataset.id===id)});
+  det.style.setProperty('--dc',a.c);
+  det.innerHTML=`<div class="badge"><i></i>${a.en}</div><h4>${a.name}</h4>
+  <dl><dt>하는 일</dt><dd>${a.role}</dd><dt>받는 입력</dt><dd>${a.input}</dd><dt>돌려주는 것</dt><dd>${a.output}</dd><dt>권한</dt><dd>${a.perm}</dd><dt>호출 시점</dt><dd>${a.when}</dd></dl>`;
+}
+AG.forEach(a=>{
+  const b=document.createElement('button');b.className='ag';b.dataset.id=a.id;b.style.setProperty('--c',a.c);
+  b.innerHTML=`<div class="dot">${a.k}</div><div><h4>${a.name}</h4><div class="en">${a.en}</div><p>${a.short}</p></div><span class="when">${a.when}</span>`;
+  b.onclick=()=>showAg(a.id);box.appendChild(b);
+});
+showAg('main');
+
+const M='var(--c-main)',E='var(--c-exp)',R='var(--c-rev)',U='var(--accent)';
+const RT=[
+ {k:'작은 수정',q:'이 버튼 문구 오타 하나만 고쳐줘',calls:0,
+  steps:[[M,'메인','바로 수정'],[M,'메인','완료 보고']],
+  p:'짧은 수정이나 파일 한두 개 변경에는 서브에이전트를 부르지 않습니다.'},
+ {k:'기능 하나',q:'로그인에 비밀번호 확인 칸 추가해줘',calls:1,
+  steps:[[M,'메인','요구사항 R1~R4'],[M,'메인','프론트·백엔드 구현'],[M,'메인','테스트 실행'],[R,'검수','diff 검토'],[M,'메인','지적 반영'],[M,'메인','최종 보고']],
+  p:'가장 흔한 경로입니다. 검수는 구현 후 한 번, 재검수는 고친 줄만 봅니다.'},
+ {k:'큰 작업',q:'결제 재시도 로직을 큐 기반으로 바꿔줘',calls:3,
+  steps:[[U,'사용자','범위 승인'],[E,'탐색','관련 파일·흐름'],[M,'메인','설계'],[R,'검수','설계 검토'],[M,'메인','구현·테스트'],[R,'검수','diff 검토'],[M,'메인','최종 보고 + learnings']],
+  p:'처음 보는 큰 저장소이거나 영향 범위가 넓을 때만 이 경로를 씁니다. 큰 방향 전환은 사용자 승인을 받습니다.'}
+];
+const pk=document.getElementById('picker'),rb=document.getElementById('routeBox');
+function showRt(i){
+  const r=RT[i];
+  pk.querySelectorAll('.req').forEach((b,j)=>{b.classList.toggle('on',j===i);b.setAttribute('aria-pressed',j===i)});
+  rb.innerHTML=`<div class="title"><b>${r.k}</b><span>서브에이전트 호출 ${r.calls}회</span></div>
+  <ol class="flow">${r.steps.map((s,j)=>`<li><div class="step" style="--c:${s[0]};animation-delay:${j*60}ms"><small>${s[1]}</small>${s[2]}</div></li>`).join('')}</ol><p>${r.p}</p>`;
+}
+RT.forEach((r,i)=>{
+  const b=document.createElement('button');b.className='req';
+  b.innerHTML=`<div class="k">${r.k}</div><q>${r.q}</q>`;b.onclick=()=>showRt(i);pk.appendChild(b);
+});
+showRt(1);
+</script>
+
+</body>
+</html>
