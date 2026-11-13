@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>몬길: 스타 다이브 홍대 팝업스토어 공간 동선 기획안 (모드 B)</title>
+<style>
+  :root { --ink:#111; --sub:#555; --line:#d0d0d0; --soft:#f4f4f4; --mid:#e6e6e6; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#fff; color:var(--ink); font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif; line-height:1.65; font-size:16px; }
+  .wrap { max-width:960px; margin:0 auto; padding:32px 16px 80px; }
+  header { border-bottom:3px solid var(--ink); padding-bottom:20px; margin-bottom:28px; }
+  .kicker { font-size:13px; letter-spacing:.08em; color:var(--sub); margin:0 0 6px; }
+  h1 { font-size:28px; line-height:1.3; margin:0 0 10px; }
+  h2 { font-size:21px; margin:44px 0 12px; padding-top:14px; border-top:1px solid var(--ink); }
+  h3 { font-size:17px; margin:24px 0 8px; }
+  p { margin:8px 0; }
+  .note { background:var(--soft); border-left:4px solid var(--ink); padding:12px 14px; font-size:14.5px; margin:14px 0; }
+  .todo { display:inline-block; background:var(--ink); color:#fff; font-size:12.5px; padding:1px 7px; border-radius:3px; white-space:nowrap; }
+  .tag { display:inline-block; border:1px solid var(--ink); font-size:12px; padding:0 6px; border-radius:10px; margin-right:4px; white-space:nowrap; }
+  .draft { color:var(--sub); font-size:13px; }
+  .scroll { overflow-x:auto; }
+  table { border-collapse:collapse; width:100%; font-size:14.5px; margin:10px 0; }
+  th, td { border:1px solid var(--line); padding:9px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--mid); font-weight:700; white-space:nowrap; }
+  .flow { display:flex; gap:8px; align-items:stretch; margin:16px 0; }
+  .zone { flex:1; border:2px solid var(--ink); padding:12px; min-width:0; }
+  .zone.sub { border:1px dashed var(--sub); }
+  .zone b { display:block; font-size:15px; }
+  .zone small { color:var(--sub); display:block; margin-top:4px; font-size:13px; }
+  .arrow { align-self:center; font-size:20px; color:var(--sub); }
+  ul { padding-left:20px; margin:8px 0; }
+  li { margin:4px 0; }
+  .qa { border:1px solid var(--line); margin:10px 0; }
+  .qa .q { background:var(--soft); padding:10px 12px; font-weight:700; }
+  .qa .a { padding:10px 12px; font-size:15px; }
+  .qa .why { padding:0 12px 10px; color:var(--sub); font-size:13.5px; }
+  footer { margin-top:48px; border-top:1px solid var(--line); padding-top:14px; color:var(--sub); font-size:13px; }
+  @media (max-width:700px) {
+    h1 { font-size:23px; }
+    .flow { flex-direction:column; }
+    .arrow { transform:rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">모드 B · 오프라인 팝업/전시 공간 기획 · 제안서 초안</p>
+  <h1>몬길: 스타 다이브<br>홍대 팝업스토어 공간 동선 기획안</h1>
+  <p>근거 자료: <code>mongil_persona_cjm.md</code> (5-Whys 퍼소나, 6단계 CJM)</p>
+  <div class="note">
+    이 문서의 퍼소나와 CJM은 가설이다(실제 인터뷰 근거 없음). 현장 문구는 모두 직접 만든 <b>(시안)</b>이다.
+    확인되지 않은 수치·일정·굿즈·보상은 <span class="todo">실데이터 입력</span>으로 남겼다.
+  </div>
+</header>
+
+<h2>1. 입력 슬롯 요약</h2>
+<div class="scroll">
+<table>
+  <tr><th>BRAND</th><td>넷마블 (개발: 넷마블몬스터)</td></tr>
+  <tr><th>ITEM</th><td>몬길: 스타 다이브 — 오픈월드 라이브 서비스 게임</td></tr>
+  <tr><th>TARGET</th><td>새로 할 오픈월드·서브컬처 게임을 찾지만, 오래된 게임은 방대한 콘텐츠와 따라잡기 경쟁 때문에 시작이 부담스러운 유저</td></tr>
+  <tr><th>SITUATION</th><td>캐릭터 일러스트를 보고 시작할지 고민할 때 / 주년 이벤트 소식을 들었을 때 / 스트리머 플레이 영상을 봤을 때</td></tr>
+  <tr><th>공간</th><td>홍대 오프라인 팝업스토어. 정확한 위치·면적·운영 기간·예산 <span class="todo">실데이터 입력</span></td></tr>
+</table>
+</div>
+
+<h2>2. 퍼소나 한 줄 요약</h2>
+<div class="note">
+  이 사람은 <b>마음에 든 캐릭터와 내 속도로 새 세계를 즐기고</b> 싶은데,
+  <b>늦게 시작하면 또 따라잡기 경쟁에 지칠 거라는 걱정</b> 때문에 못 한다.
+</div>
+<p><b>Why 5 (바라는 자기 모습):</b> 남을 따라잡는 사람이 아니라, 내 속도로 마음에 든 캐릭터와 처음부터 함께 커가는 사람. "이번에는 늦지 않게 시작했다"는 안도감.</p>
+
+<h3>이 퍼소나에서 나온 공간 원칙 3가지</h3>
+<ul>
+  <li><b>경쟁 요소를 넣지 않는다.</b> 점수 순위판, 선착순 랭킹, 고인물 인증 코너는 두지 않는다. (근거: Why 3·4 — 남과 비교되는 순간 재미가 사라짐)</li>
+  <li><b>"지금 시작해도 된다"를 눈으로 확인시킨다.</b> 신규 유저가 받는 것을 숫자로 게시한다. (근거: CJM 3단계 이탈 이유)</li>
+  <li><b>캐릭터가 주인공이다.</b> 유입 계기가 일러스트이므로 모든 존의 첫 시선은 캐릭터에 둔다. (근거: SITUATION ①)</li>
+</ul>
+
+<h2>3. 공간 콘셉트와 공략 단계</h2>
+<p><b>콘셉트 (시안):</b> "오늘이 1일차" — 여기 들어온 모든 사람이 같은 출발선에서 시작하는 공간.</p>
+<p>이 기획이 공략하는 CJM 단계는 <b>1단계(문제 자각) · 3단계(비교 &amp; 의심) · 6단계(자발적 바이럴/재구매)</b>다.</p>
+<div class="scroll">
+<table>
+  <tr><th>단계</th><th>고객의 속마음</th><th>이탈하는 이유</th><th>공간이 하는 일</th></tr>
+  <tr><td>1 문제 자각</td><td>"새로 할 거 없나… 근데 또 처음부터 키우긴 귀찮은데."</td><td>새 게임을 찾지 않고 지나침</td><td>길에서 캐릭터를 보고 발걸음을 멈추게 한다</td></tr>
+  <tr><td>3 비교 &amp; 의심 ⚠️</td><td>"원신·명조는 너무 쌓였고, 몬길도 벌써 반년 넘었잖아. 지금 해도 되나?"</td><td>따라잡을 분량을 가늠하다 포기</td><td>직접 해 보게 하고, 신규 유저 지원을 숫자로 보여 주고, 스태프가 의심 질문에 답한다</td></tr>
+  <tr><td>6 바이럴/재구매</td><td>"늦게 시작했는데 할 만해. 너도 지금 와."</td><td>자랑할 계기가 없으면 혼자 하고 끝남</td><td>굿즈와 인증 이벤트로 "나 시작했다"를 올릴 계기를 준다</td></tr>
+</table>
+</div>
+
+<h2>4. 공간 동선</h2>
+<div class="flow">
+  <div class="zone"><span class="tag">1단계</span><b>ZONE 1 · 입구 포토존</b><small>길에서 보이는 대형 캐릭터 비주얼. 발걸음을 멈추는 곳</small></div>
+  <div class="arrow">→</div>
+  <div class="zone"><span class="tag">3단계</span><b>ZONE 2 · 체험존 + 미니게임 스탬프</b><small>직접 플레이하고 스탬프를 모으며 의심을 푸는 곳</small></div>
+  <div class="arrow">→</div>
+  <div class="zone"><span class="tag">6단계</span><b>ZONE 3 · 굿즈샵 + SNS 인증</b><small>현장 구매, X·인스타그램 스토리 인증 후 출구</small></div>
+</div>
+<p class="draft">입장은 한 방향 동선(입구 → ZONE 1 → 2 → 3 → 출구)으로 운영해 역류와 재입장 줄 꼬임을 막는다. 존별 면적·수용 인원 <span class="todo">실데이터 입력</span></p>
+
+<h3>ZONE 1 · 입구 포토존 <span class="tag">CJM 1단계</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>목적</th><td>지나가던 사람이 캐릭터를 보고 멈춘다. 게임을 모르는 사람도 사진은 찍는다.</td></tr>
+  <tr><th>구성</th><td>
+    · 거리에서 정면으로 보이는 대형 캐릭터 일러스트 월 (전시 캐릭터 <span class="todo">실데이터 입력: 캐릭터 선정</span>)<br>
+    · 캐릭터 옆에 서서 찍는 포토 스팟 1~2곳, 바닥에 촬영 위치 표시<br>
+    · 포토존은 <b>입장 대기 없이 누구나</b> 이용 가능하게 외부에 둔다 (게임을 모르는 행인도 1단계로 들어오게)
+  </td></tr>
+  <tr><th>노리는 감정</th><td>"어, 얘 예쁜데 무슨 게임이지?" — 호기심</td></tr>
+  <tr><th>사이니지 문구 (시안)</th><td>"오늘이 1일차" / "처음이어도 괜찮아요. 안에서 5분만 해 보세요."</td></tr>
+  <tr><th>다음 존으로 넘기는 장치</th><td>포토존 옆에서 스탬프 카드를 나눠 준다. 카드 첫 칸은 "포토존 방문"으로 이미 찍혀 있다.</td></tr>
+  <tr><th>하지 않는 것</th><td>누적 플레이 시간·랭킹 등 기존 유저를 추켜세우는 문구</td></tr>
+</table>
+</div>
+
+<h3>ZONE 2 · 체험존 + 미니게임 스탬프 <span class="tag">CJM 3단계</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>목적</th><td>"지금 시작해도 되나?"라는 의심을 직접 해 보는 경험과 숫자로 푼다. 이 기획에서 가장 중요한 존.</td></tr>
+  <tr><th>구성</th><td>
+    <b>① 게임 시연대</b> — 신규 계정 상태로 초반을 직접 플레이. 기기 종류·대수·1인 체험 시간 <span class="todo">실데이터 입력</span><br>
+    <b>② "지금 시작하면 받는 것" 보드</b> — 신규 유저 지급 내역을 숫자로 게시: 캐릭터·재화·육성 재료 <span class="todo">실데이터 입력</span>, 진행 중 이벤트 기간 <span class="todo">실데이터 입력</span><br>
+    <b>③ 미니게임 2~3종</b> — 몬스터 테이밍(포획) 콘셉트를 살린 간단한 체험. 종류·규칙 <span class="todo">실데이터 입력</span><br>
+    <b>④ 스탬프 카드</b> — 시연 1칸 + 미니게임 칸. 완주하면 ZONE 3에서 완주 보상 수령
+  </td></tr>
+  <tr><th>스탬프 설계 원칙</th><td>
+    · 스탬프는 <b>잘해야 받는 것이 아니라 참여하면 받는다.</b> 점수·기록·순위를 게시하지 않는다.<br>
+    · 미니게임 실패 시에도 재도전 1회 후 스탬프 지급 (퍼소나 Why 4: 숙제·순위처럼 느껴지면 이탈)
+  </td></tr>
+  <tr><th>노리는 감정</th><td>"생각보다 할 만하네. 지금 들어가도 받을 게 있네." — 안도</td></tr>
+  <tr><th>사이니지 문구 (시안)</th><td>"신규 계정으로 시작합니다. 여기서는 모두 1레벨이에요." / "점수는 기록하지 않아요. 해 보면 스탬프!"</td></tr>
+  <tr><th>스태프 역할</th><td>시연대마다 1명이 조작을 돕고, 의심 질문에 답한다 (6장 Q&amp;A 참고)</td></tr>
+</table>
+</div>
+
+<h3>ZONE 3 · 굿즈샵 + SNS 인증 이벤트 <span class="tag">CJM 6단계</span></h3>
+<div class="scroll">
+<table>
+  <tr><th>목적</th><td>현장 구매로 마무리하고, "나 시작했다"를 SNS에 올릴 계기를 준다.</td></tr>
+  <tr><th>구성</th><td>
+    <b>① 굿즈 판매대</b> — 품목·가격·수량 <span class="todo">실데이터 입력</span><br>
+    <b>② 스탬프 완주 보상 수령대</b> — 보상 내용 <span class="todo">실데이터 입력</span> (예: 인게임 쿠폰, 포토카드 — 확정 아님)<br>
+    <b>③ SNS 인증 데스크</b> — X 또는 인스타그램 스토리에 현장 사진 + 지정 해시태그 게시 후 화면을 보여 주면 참여 보상 지급. 해시태그·보상 <span class="todo">실데이터 입력</span><br>
+    <b>④ 인증샷 스팟</b> — 구매한 굿즈나 스탬프 카드를 들고 찍는 소형 배경
+  </td></tr>
+  <tr><th>노리는 감정</th><td>"오늘 시작한 기념" — 뿌듯함</td></tr>
+  <tr><th>사이니지 문구 (시안)</th><td>"오늘 시작한 여행을 자랑해 주세요" / "스토리 인증하고 <span class="todo">실데이터 입력: 보상</span> 받기"</td></tr>
+  <tr><th>인증 안내 유의</th><td>
+    · 보상을 받고 올리는 게시물은 경제적 이해관계 표시(예: "이벤트 참여")가 필요한지 <b>표시·광고 규정 검토 필요</b><br>
+    · 비공개 계정·스토리는 화면 확인으로만 인증하고, 계정 정보는 수집·기록하지 않는다
+  </td></tr>
+</table>
+</div>
+
+<h2>5. 존별 CJM 단계 매핑</h2>
+<div class="scroll">
+<table>
+  <tr><th>위치</th><th>CJM 단계</th><th>고객 속마음</th><th>막는 이탈 이유</th><th>장치</th></tr>
+  <tr><td>ZONE 1 포토존</td><td><b>1 문제 자각</b></td><td>"새로 할 거 없나…"</td><td>새 게임을 찾지 않고 지나침</td><td>대형 캐릭터 월, 외부 개방 포토 스팟</td></tr>
+  <tr><td>입장 대기 줄 <span class="draft">(보조 제안)</span></td><td>2 탐색</td><td>"이 캐릭터 예쁜데? 무슨 게임이지?"</td><td>정보가 기존 유저 기준이라 "이미 늦었네"</td><td>대기 줄 벽면에 "처음 온 사람을 위한 3줄 소개"와 캐릭터 소개 패널</td></tr>
+  <tr><td>ZONE 2 체험·스탬프</td><td><b>3 비교 &amp; 의심 ⚠️</b></td><td>"지금 해도 되나? 또 뒤처지는 거 아냐?"</td><td>따라잡을 분량을 가늠하다 포기</td><td>신규 계정 시연, "지금 시작하면 받는 것" 보드, 순위 없는 스탬프, 스태프 Q&amp;A</td></tr>
+  <tr><td>ZONE 2 출구 쪽 <span class="draft">(보조 제안)</span></td><td>4 구매 트리거</td><td>"나처럼 늦게 시작한 사람도 할 만하네."</td><td>근거가 공식 홍보뿐이면 안 믿음</td><td>"오늘 시작한 사람" 방명록 벽 — 방문객이 직접 쓴 한 줄 메모를 붙인다 (운영 측이 후기를 지어내 붙이지 않는다)</td></tr>
+  <tr><td>ZONE 3 수령대 <span class="draft">(보조 제안)</span></td><td>5 첫 사용</td><td>"집에 가서 뭐부터 하지?"</td><td>커뮤니티에서 남과 비교하다 다시 지침</td><td>"첫 주에 할 것만" 안내 카드 배포. 내용 <span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>ZONE 3 굿즈·SNS</td><td><b>6 바이럴/재구매</b></td><td>"너도 지금 와."</td><td>자랑할 계기가 없음</td><td>굿즈 구매, 스토리 인증 이벤트, 인증샷 스팟</td></tr>
+</table>
+</div>
+<p class="draft">굵게 표시한 3개 단계가 요청받은 핵심 동선이다. "보조 제안" 3곳은 CJM의 나머지 단계를 메우기 위한 추가안으로, 넣을지는 결정이 필요하다.</p>
+
+<h2>6. 현장 스태프 응대 매뉴얼</h2>
+
+<h3>6-1. 응대 기본 원칙</h3>
+<ul>
+  <li><b>모르면 지어내지 않는다.</b> 일정·확률·보상 수량을 모르면 "공식 공지를 확인해 드릴게요"라고 답하고 안내 QR(공식 채널)을 보여 준다.</li>
+  <li><b>약속하지 않는다.</b> 서비스 기간, 향후 업데이트, 복각 일정은 스태프가 단정하지 않는다.</li>
+  <li><b>다른 게임을 깎아내리지 않는다.</b> 비교 질문에는 몬길의 사실만 답한다.</li>
+  <li><b>결제를 권하지 않는다.</b> 과금 질문에는 무료로 받는 것부터 안내한다.</li>
+  <li><b>처음 온 사람 기준으로 말한다.</b> 게임 용어(천장, 리세 등)는 손님이 먼저 쓸 때만 쓴다.</li>
+</ul>
+
+<h3>6-2. 의심 질문 Q&amp;A</h3>
+<p class="draft">답변 문구는 시안이다. <span class="todo">실데이터 입력</span> 자리는 운영 전 공식 정보로 채운다.</p>
+
+<div class="qa">
+  <div class="q">Q1. 지금 시작해도 안 늦었어요?</div>
+  <div class="a">"지금 시작하시면 <span class="todo">실데이터 입력: 신규 유저 지급 내역</span>을 받으실 수 있어요. 저쪽 보드에 정리돼 있고, 시연대에서 신규 계정 그대로 해 보실 수 있어요."</div>
+  <div class="why">근거: CJM 3단계 핵심 의심. 말로 설득하지 말고 보드와 시연으로 넘긴다.</div>
+</div>
+<div class="qa">
+  <div class="q">Q2. 원신이나 명조랑 뭐가 달라요?</div>
+  <div class="a">"몬길은 몬스터를 길들여서 같이 싸우는 게 특징이에요. 저쪽 미니게임에서 직접 해 보실 수 있어요. 다른 게임과 비교는 제가 말씀드리기 어렵고, 해 보시고 판단하시면 좋겠어요."</div>
+  <div class="why">근거: 몬스터 테이밍은 기사로 확인된 특징. 경쟁작 평가는 하지 않는다.</div>
+</div>
+<div class="qa">
+  <div class="q">Q3. 과금 많이 해야 돼요?</div>
+  <div class="a">"게임은 무료로 시작하실 수 있어요. 무료로 받는 것부터 보시면 <span class="todo">실데이터 입력: 무료 지급 내역</span>이에요. 결제 상품과 가격은 게임 안 상점에서 확인하실 수 있어요."</div>
+  <div class="why">근거: 과금 부담은 퍼소나의 핵심 걱정. 결제를 권하거나 "안 해도 된다"고 단정하지 않는다.</div>
+</div>
+<div class="qa">
+  <div class="q">Q4. 저 캐릭터 지금 얻을 수 있어요?</div>
+  <div class="a">"<span class="todo">실데이터 입력: 전시 캐릭터별 획득 경로와 기간</span> 기준으로 안내드릴게요. 확률은 게임 안 확률 안내에서 확인하실 수 있어요."</div>
+  <div class="why">근거: CJM 4단계 — 마음에 든 캐릭터를 지금 얻을 수 없으면 미룬다. 전시 캐릭터 전원의 획득 경로표를 스태프가 갖고 있어야 한다.</div>
+</div>
+<div class="qa">
+  <div class="q">Q5. 이 게임 오래 서비스해요? 금방 접는 거 아니에요?</div>
+  <div class="a">"서비스 기간은 제가 약속드릴 수 없지만, 공개된 업데이트 계획은 <span class="todo">실데이터 입력: 공식 로드맵</span>이에요. 공식 채널 QR 드릴게요."</div>
+  <div class="why">근거: CJM 3단계 대사. 스태프가 보장하면 안 되는 질문이다.</div>
+</div>
+<div class="qa">
+  <div class="q">Q6. 혼자 해도 돼요? 숙제 많아요?</div>
+  <div class="a">"혼자 하셔도 되고, 하루에 꼭 해야 하는 건 <span class="todo">실데이터 입력: 일일 콘텐츠 분량</span> 정도예요. 처음 일주일 동안 할 것만 정리한 카드를 나가실 때 드려요."</div>
+  <div class="why">근거: Why 4 — 숙제처럼 느껴지면 이탈.</div>
+</div>
+<div class="qa">
+  <div class="q">Q7. 어떤 기기에서 할 수 있어요? 콘솔은요?</div>
+  <div class="a">"모바일과 PC에서 하실 수 있어요. 콘솔은 PS5와 Xbox로 준비 중이라고 발표됐고, 일정은 <span class="todo">실데이터 입력: 콘솔 출시일</span>이에요."</div>
+  <div class="why">근거: 2026년 4월 출시 기사 기준 모바일·PC 출시, PS5·Xbox 예정. 현재 상태는 운영 전 재확인.</div>
+</div>
+<div class="qa">
+  <div class="q">Q8. 쿠폰은 어떻게 써요? 기존 계정에도 돼요?</div>
+  <div class="a">"<span class="todo">실데이터 입력: 쿠폰 사용 방법·대상·유효기간</span>"</div>
+  <div class="why">현장에서 가장 자주 나올 실무 질문. 입력 화면 캡처를 준비한다.</div>
+</div>
+
+<h3>6-3. 굿즈 수량 운영</h3>
+<div class="scroll">
+<table>
+  <tr><th>항목</th><th>운영 방식</th><th>값</th></tr>
+  <tr><td>품목별 총수량</td><td>운영 기간 전체 물량을 먼저 정한다</td><td><span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>일자별 배분</td><td>총수량을 운영일수로 나눠 매일 정해진 양만 푼다. 첫날에 몰아서 풀지 않는다</td><td><span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>시간대별 배분</td><td>하루 물량을 오전·오후로 나눠, 퇴근 후에 오는 직장인도 살 수 있게 한다</td><td><span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>1인 구매 한도</td><td>품목별 1인 구매 수량을 제한하고 입구·계산대에 게시한다</td><td><span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>재고 현황 게시</td><td>입구와 대기 줄에 품목별 "판매 중 / 소량 / 품절"을 표시하고 스태프가 수시로 갱신한다</td><td>—</td></tr>
+  <tr><td>품절 응대</td><td>"오늘 물량은 끝났고, 다음 입고는 <span class="todo">실데이터 입력</span>입니다." 재입고가 없으면 없다고 말한다</td><td>—</td></tr>
+  <tr><td>온라인 판매 여부</td><td>현장 품절 시 안내할 대체 구매처가 있는지 확인</td><td><span class="todo">실데이터 입력</span></td></tr>
+</table>
+</div>
+<div class="note">대기 줄에서 품절을 미리 알리는 것이 가장 중요하다. 한 시간 줄을 선 뒤 품절을 아는 것이 가장 큰 불만 요인이다.</div>
+
+<h3>6-4. 되팔이 방지 운영</h3>
+<p>목적은 실제 팬이 살 수 있게 하는 것이다. 아래에서 어떤 수단을 쓸지는 결정이 필요하다.</p>
+<div class="scroll">
+<table>
+  <tr><th>수단</th><th>방법</th><th>유의점</th></tr>
+  <tr><td>1인 구매 한도</td><td>품목별 1인 <span class="todo">실데이터 입력</span>개. 계산대에서 스탬프 카드에 구매 표시</td><td>가장 기본. 반드시 적용 권장</td></tr>
+  <tr><td>입장 단위 관리</td><td>입장 시 손목 밴드 또는 당일 스탬프 카드 1장 지급. 카드 1장당 구매 1회</td><td>재입장 구매 여부 방침 <span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>체험 후 구매</td><td>한정 굿즈는 스탬프 완주자만 구매 가능</td><td>되팔이 목적 방문의 시간 비용을 높인다. 대신 일반 방문객 대기도 길어진다</td></tr>
+  <tr><td>사전 예약제</td><td>시간대별 입장 예약으로 새벽 줄서기와 줄 대행을 줄인다</td><td>예약 시스템·노쇼 처리 방침 <span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>물량 분산</td><td>6-3의 일자별·시간대별 배분</td><td>오픈런 싹쓸이를 구조적으로 막는다</td></tr>
+  <tr><td>대리 구매 차단</td><td>줄 서지 않은 일행의 몫 구매 불가, 결제는 본인이 직접</td><td>입구 안내문에 미리 고지</td></tr>
+  <tr><td>본인 확인</td><td>예약자 이름 확인 수준으로 최소화</td><td><b>신분증 사본·사진 촬영·계정 정보 수집은 하지 않는다.</b> 개인정보 수집이 필요하면 법무 검토 후 결정</td></tr>
+</table>
+</div>
+<h3>스태프 대응 문구 (시안)</h3>
+<ul>
+  <li>한도 초과 요청: "많은 분이 구매하실 수 있도록 한 분당 <span class="todo">실데이터 입력</span>개까지만 판매하고 있어요."</li>
+  <li>일행 몫 요청: "줄을 서신 분 본인만 구매하실 수 있어요."</li>
+  <li>항의가 길어질 때: 논쟁하지 않고 현장 매니저에게 넘긴다. 매니저 호출 방법 <span class="todo">실데이터 입력</span></li>
+  <li>현장에서 되팔이 거래를 목격했을 때: 스태프가 직접 제지하거나 촬영하지 않고 매니저에게 보고한다.</li>
+</ul>
+
+<h2>7. 대기·체류 경험</h2>
+<ul>
+  <li>대기 줄 벽면: 캐릭터 소개 패널과 "처음 온 사람을 위한 3줄 소개" (5장의 보조 제안)</li>
+  <li>대기 중 안내: 예상 대기 시간과 굿즈 재고 현황을 줄 중간에 게시</li>
+  <li>대기 줄 QR: 게임 설치 페이지로 연결. 줄 서는 동안 설치하면 ZONE 2에서 바로 이어서 안내 가능</li>
+  <li>혼잡 시: 시연 시간을 줄이기보다 입장 간격을 조절한다. 1인 체험 시간 <span class="todo">실데이터 입력</span></li>
+  <li>안전: 최대 동시 수용 인원, 비상 동선, 야외 대기 줄 관리 <span class="todo">실데이터 입력</span></li>
+</ul>
+
+<h2>8. 운영 체크리스트</h2>
+<div class="scroll">
+<table>
+  <tr><th>구분</th><th>항목</th><th>상태</th></tr>
+  <tr><td>공간</td><td>위치(홍대 내 정확한 주소)·면적·임대 기간</td><td><span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>일정</td><td>운영 기간·운영 시간. 주년 이벤트 등 게임 일정과 맞출지 여부</td><td><span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>예산</td><td>공간·시공·굿즈·인건비</td><td><span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>인력</td><td>존별 스태프 수, 매니저, 교대표</td><td><span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>교육</td><td>스태프 사전 교육: 6장 매뉴얼, 신규 계정 초반 직접 플레이</td><td>운영 전 필수</td></tr>
+  <tr><td>기기</td><td>시연 기기, 네트워크, 신규 계정 준비·초기화 방법</td><td><span class="todo">실데이터 입력</span></td></tr>
+  <tr><td>검토</td><td>SNS 인증 이벤트의 표시·광고 규정, 경품 규정, 개인정보 수집 여부</td><td>법무 검토 필요</td></tr>
+  <tr><td>리스크</td><td>굿즈 조기 품절, 대기 줄 민원, 되팔이, 우천, 시연 기기 장애</td><td>대응 담당자 지정</td></tr>
+</table>
+</div>
+
+<h2>9. 실데이터 체크리스트</h2>
+<div class="scroll">
+<table>
+  <tr><th>항목</th><th>쓰이는 곳</th><th>확인할 곳</th></tr>
+  <tr><td>팝업 위치·면적·기간·예산</td><td>1장, 8장</td><td>내부 결정</td></tr>
+  <tr><td>전시 캐릭터 선정과 캐릭터별 획득 경로·기간</td><td>ZONE 1, Q4</td><td>공식 공지·인게임</td></tr>
+  <tr><td>신규 유저 지급 내역(캐릭터·재화·육성 재료)</td><td>ZONE 2 보드, Q1, Q3</td><td>공식 공지·인게임</td></tr>
+  <tr><td>진행 중 이벤트·주년 일정</td><td>ZONE 2 보드</td><td>공식 공지</td></tr>
+  <tr><td>공식 업데이트 로드맵</td><td>Q5</td><td>공식 방송·공지</td></tr>
+  <tr><td>일일 콘텐츠 분량, "첫 주에 할 것" 내용</td><td>Q6, 안내 카드</td><td>인게임 확인</td></tr>
+  <tr><td>콘솔 출시 일정·현재 지원 플랫폼</td><td>Q7</td><td>공식 공지</td></tr>
+  <tr><td>쿠폰 사용 방법·대상·유효기간</td><td>Q8, 완주 보상</td><td>운영팀</td></tr>
+  <tr><td>미니게임 종류·규칙, 시연 기기·체험 시간</td><td>ZONE 2</td><td>내부 결정</td></tr>
+  <tr><td>굿즈 품목·가격·총수량·일자별 배분·1인 한도</td><td>ZONE 3, 6-3, 6-4</td><td>내부 결정</td></tr>
+  <tr><td>SNS 인증 해시태그·보상</td><td>ZONE 3</td><td>내부 결정</td></tr>
+  <tr><td>스태프 수·매니저 호출 방법·수용 인원</td><td>6-4, 7장, 8장</td><td>내부 결정</td></tr>
+</table>
+</div>
+
+<h2>10. 성공 지표 (KPI)</h2>
+<p class="draft">지표 이름만 정했다. 목표 수치는 모두 <span class="todo">실데이터 입력</span>.</p>
+<div class="scroll">
+<table>
+  <tr><th>CJM 단계</th><th>지표</th><th>측정 방법</th></tr>
+  <tr><td>1단계</td><td>포토존 이용자 수, 포토존 → 입장 전환율</td><td>현장 계수, 스탬프 카드 배포 수</td></tr>
+  <tr><td>3단계</td><td>시연 참여율, 스탬프 완주율, 현장 설치 수</td><td>스탬프 카드 회수, 대기 줄 QR 유입 수</td></tr>
+  <tr><td>3단계</td><td>의심 질문 유형별 빈도</td><td>스태프가 Q1~Q8 번호로 집계 (다음 기획의 근거 자료)</td></tr>
+  <tr><td>6단계</td><td>SNS 인증 참여 수, 해시태그 게시물 수</td><td>인증 데스크 집계, 해시태그 검색</td></tr>
+  <tr><td>6단계</td><td>굿즈 구매 전환율, 품절 시점</td><td>판매 기록</td></tr>
+  <tr><td>사후</td><td>팝업 쿠폰 사용 수(신규 계정 비중)</td><td>쿠폰 사용 데이터</td></tr>
+</table>
+</div>
+
+<footer>
+  근거 파일: <code>persona_cjm/mongil_persona_cjm.md</code> · 스킬: <code>.claude/skills/persona-cjm/SKILL.md</code> (모드 B) · 작성일 2026-11-13<br>
+  이 문서는 제안서 초안이며 넷마블의 공식 자료가 아니다.
+</footer>
+
+</div>
+</body>
+</html>
