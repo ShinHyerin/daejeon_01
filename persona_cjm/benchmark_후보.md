@@ -1,7 +1,7 @@
 # 벤치마킹 브랜드 후보 — 기준 브랜드: 몬길: 스타 다이브
 
-- 조사일: 2026-11-13 (웹 검색)
-- 이 문서의 기준 브랜드는 **몬길: 스타 다이브**다. (폴더 `CLAUDE.md`의 기준 브랜드 '원신'은 이 문서에서 벤치마킹 후보로 다룬다 — 사용자 결정)
+- 조사일: 2026-11-13 (웹 검색) · 같은 날 2차 보강: 기준 브랜드 정보를 `CLAUDE.md`에 맞춰 최신화하고, 비어 있던 값을 다시 찾음
+- 이 문서의 기준 브랜드는 **몬길: 스타 다이브**다 (폴더 `CLAUDE.md`와 같음).
 - 규모 기준: 퍼블리셔 넷마블 전체가 아니라 **개발사 넷마블몬스터** 기준 (사용자 결정). 넷마블 수치는 참고로만 적었다.
 - 매출·직원 수는 출처가 있는 값만 적었다. 못 찾은 값은 `[내가 확인]`.
 - 통화는 환산하지 않고 출처 표기 그대로 두었다. 추정치(Sensor Tower, AppMagic, Revelio Labs 등)는 "추정"으로 표시했다.
@@ -10,17 +10,17 @@
 ## 우리 고객과 고르는 순간 (사용자 제공)
 
 - **고객:** 새로 할 오픈월드·서브컬처 라이브 서비스 게임을 찾는 유저. 오래된 게임은 콘텐츠가 방대하고, 다른 유저를 따라가지 못하고, 지금 캐릭터를 뽑아도 파티가 완성되지 않아 시작·복귀가 부담스럽다. 경쟁 게임이 아닌데도 커뮤니티를 통해 경쟁하게 된다.
-- **고르는 순간:** 공식 유튜브나 유저 커뮤니티에서 캐릭터 일러스트를 보고 시작할지 고민할 때 / 0.5주년·1주년 같은 큰 이벤트 소식을 들었을 때.
-- 참고한 퍼소나: `context/genshin_persona_cjm.md` (원신 복귀 유저 — "공백 때문에 따라잡기 부담"이라는 같은 결핍)
+- **고르는 순간:** 공식 유튜브나 유저 커뮤니티에서 캐릭터 일러스트를 보고 시작할지 고민할 때 / 0.5주년·1주년 같은 큰 이벤트 소식을 들었을 때. (반주년은 2026-10-15에 지났고, 다음은 1주년)
+- 참고한 퍼소나: `context/mongil_persona_cjm.md` — "마음에 든 캐릭터와 내 속도로 새 세계를 즐기고 싶은데, 늦게 시작하면 또 따라잡기 경쟁에 지칠 거라는 걱정 때문에 못 한다."
 
 ## 후보 표
 
 | 브랜드 | 운영 회사 | 대표 제품 | 왜 같은 고객인가 | 매출액 (기준 연도) | 직원 수 | 출처 링크 | 인스타그램 |
 |---|---|---|---|---|---|---|---|
-| **(기준) 몬길: 스타 다이브** | 넷마블몬스터 (개발) / 넷마블 (퍼블리싱, 지분 75.67%) | 몬스터 테이밍 액션 RPG. 2026-04-15 글로벌 출시. 모바일 + PC(넷마블 런처), PS5·Xbox 예정 | — | 넷마블몬스터 555억 2,538만 원 (2025). 참고: 넷마블 2조 8,351억 원 (2025) | `[내가 확인]` | [사람인·NICE평가정보](https://www.saramin.co.kr/zf_user/company-info/view-inner-finance/csn/Z1BJZVFiMjJEZDE2U3RJQTBRa1FEZz09/company_nm/%EB%84%B7%EB%A7%88%EB%B8%94%EB%AA%AC%EC%8A%A4%ED%84%B0(%EC%A3%BC)) · [넷마블 실적](https://v.daum.net/v/20260206125244168) · [출시·플랫폼](https://m.ceoscoredaily.com/page/view/2026041715423861364) · [인벤](https://www.inven.co.kr/webzine/news/?news=315626) | `[내가 확인]` |
+| **(기준) 몬길: 스타 다이브** | 넷마블몬스터 (개발) / 넷마블 (퍼블리싱, 지분 75.67%) | 몬스터 테이밍 액션 RPG(라이브 서비스). 2026-04-15 글로벌 출시. 판매 채널: 구글플레이·앱스토어·에픽게임즈 스토어·넷마블 런처, 일본 DMM GAMES(2026-11-11), PS5·Xbox 준비 중 (`CLAUDE.md` 기준) | — | 넷마블몬스터 555억 2,538만 원 (2025). 참고: 넷마블 2조 8,351억 원 (2025) | 넷마블몬스터 `[내가 확인]`. 참고: 넷마블 785명 (원티드, 국민연금 가입 기준, 기준일 표시 없음) | [사람인·NICE평가정보](https://www.saramin.co.kr/zf_user/company-info/view-inner-finance/csn/Z1BJZVFiMjJEZDE2U3RJQTBRa1FEZz09/company_nm/%EB%84%B7%EB%A7%88%EB%B8%94%EB%AA%AC%EC%8A%A4%ED%84%B0(%EC%A3%BC)) · [넷마블 실적](https://v.daum.net/v/20260206125244168) · [출시·플랫폼](https://m.ceoscoredaily.com/page/view/2026041715423861364) · [인벤](https://www.inven.co.kr/webzine/news/?news=315626) · [원티드: 넷마블](https://www.wanted.co.kr/company/2221) | `[내가 확인]` |
 | 1. 명조: 워더링 웨이브 | 쿠로게임즈 (Kuro Games, 텐센트 지분 51.4%) | 오픈월드 액션 RPG. 2024-05 출시. PC·모바일·PS5·macOS·Xbox | 같은 장르(오픈월드 서브컬처)에서 "원신보다 늦게 나와 덜 쌓인 게임"으로 함께 고민하는 대상. 사용자 예시 브랜드 | 회사 매출 `[내가 확인]`. 참고: 명조 모바일 첫 1년 3억 1,730만 달러 (AppMagic 추정, 2024-05~2025-05) | 1,500명 (2024) | [Wikipedia: Kuro Games](https://en.wikipedia.org/wiki/Kuro_Games) · [PocketGamer.biz](https://www.pocketgamer.biz/wuthering-waves-celebrates-first-anniversary-with-3173m-on-mobile-and-los-angeles-celebration/) · [Wikipedia: Wuthering Waves](https://en.wikipedia.org/wiki/Wuthering_Waves) | `[내가 확인]` |
 | 2. 원신 | 호요버스 (HoYoverse, 법인 Cognosphere) / 개발 미호요 | 오픈월드 라이브 서비스. 2020-09 출시. 모바일·PC·PS5·Xbox | 장르의 기준점. "오래돼서 시작하기 부담스러운 게임"의 대표라, 우리 고객이 가장 먼저 비교하는 대상. 사용자 예시 브랜드 | 회사 매출 `[내가 확인]`. 참고: 원신 누적 매출 63억 달러 (2024년 4주년 시점) | 5,525명 (2026-06, Revelio Labs 추정) / 5,000명 (2022) | [Wikipedia: Genshin Impact](https://en.wikipedia.org/wiki/Genshin_Impact) · [Wikipedia: miHoYo](https://en.wikipedia.org/wiki/MiHoYo) · [Revelio Labs](https://www.reveliolabs.com/companies/mihoyo/employees) | `[내가 확인]` |
-| 3. 명일방주: 엔드필드 | 하이퍼그리프 (Hypergryph) / 글로벌 퍼블리싱 그리프라인 (Gryphline) | 3D RPG + 공장 운영. 2026-01-22 출시. 모바일·PC·PS5 | 몬길과 같은 2026년 신작. "다 같이 처음부터 시작하는 새 게임"을 찾는 유저가 같은 시기에 함께 저울질 | 회사 매출 `[내가 확인]`. 참고: 엔드필드 출시 2주 12억 위안 이상 (전 플랫폼, 상하이 쉬후이구 공식 계정 발표) | `[내가 확인]` | [TechNode](https://technode.com/2026/02/09/hypergryphs-arknights-endfield-hits-173-million-in-two-weeks-expands-player-focus-to-pc-and-consoles/) · [Wikipedia: Arknights: Endfield](https://en.wikipedia.org/wiki/Arknights:_Endfield) | `[내가 확인]` |
+| 3. 명일방주: 엔드필드 | 하이퍼그리프 (Hypergryph) / 글로벌 퍼블리싱 그리프라인 (Gryphline) | 3D RPG + 공장 운영. 2026-01-22 출시. 모바일·PC·PS5 | 몬길과 같은 2026년 신작. "다 같이 처음부터 시작하는 새 게임"을 찾는 유저가 같은 시기에 함께 저울질 | 회사 매출 `[내가 확인]`. 참고: 엔드필드 출시 2주 12억 위안 이상 (전 플랫폼, 상하이 쉬후이구 공식 계정 발표) | 784명 (2026-06, Revelio Labs 추정). 참고: 약 2,000명 (2026-09 기사, 날짜 없는 추정) | [TechNode](https://technode.com/2026/02/09/hypergryphs-arknights-endfield-hits-173-million-in-two-weeks-expands-player-focus-to-pc-and-consoles/) · [Wikipedia: Arknights: Endfield](https://en.wikipedia.org/wiki/Arknights:_Endfield) · [Revelio Labs: Hypergryph](https://www.reveliolabs.com/companies/hypergryph/employees) · [시나](https://www.sina.cn/news/detail/5342806560473838.html) | `[내가 확인]` |
 | 4. 이환 (Neverness to Everness) | 호타 스튜디오 (Hotta Studio) / 퍼펙트월드 게임즈 | 도시형 오픈월드 RPG. 2026-04-29 글로벌 출시 (몬길과 같은 달). 모바일·PC·PS5·Mac | 출시 시기가 겹치는 오픈월드 서브컬처 신작. 2026년 4월에 "이번에 뭘 시작할까"를 고민한 유저의 직접 비교 대상 | 퍼펙트월드 66.6억 위안 (2025 회계연도, 게임 부문 57.1억 위안). 호타 스튜디오 단독 매출 `[내가 확인]` | `[내가 확인]` (공개 수치는 2013년 4,500명뿐이라 사용 불가) | [BigGo Finance](https://finance.biggo.com/news/bKd-0Z0BDXrLZJaAEAO8) · [Wikipedia: Neverness to Everness](https://en.wikipedia.org/wiki/Neverness_to_Everness) | `[내가 확인]` |
 | 5. 승리의 여신: 니케 (+ 스텔라 블레이드) | 시프트업 (니케 퍼블리싱: 레벨 인피니트) | 니케: 수집형 슈팅 RPG (모바일·PC, 2022-11). 스텔라 블레이드: 패키지 액션 게임 (PS5·PC) | **다른 종류의 제품.** 니케는 오픈월드가 아니지만 "일러스트를 보고 시작 고민 + 주년 이벤트 때 유입"이라는 같은 순간에 고른다. 스텔라 블레이드는 한 번 사면 끝나는 패키지라 "따라잡기 부담" 문제를 다른 방식으로 푼다 | 2,942억 원 (2025) | 322명 (2024-12) | [전자신문](https://www.etnews.com/20260211000489) · [Wikipedia: Shift Up](https://en.wikipedia.org/wiki/Shift_Up) | `[내가 확인]` |
 | 6. 블루 아카이브 | 넥슨게임즈 (퍼블리싱: 넥슨, 일본 Yostar) | 수집형 RPG (모바일·PC). 2021 출시 | **다른 종류의 제품.** 오픈월드가 아니지만 캐릭터 일러스트·2차 창작 커뮤니티로 유입되고 주년 이벤트가 복귀 계기가 되는 서브컬처 대표작 | 1,793억 원 (2025, 연결) / 2,561억 원 (2024) | 1,459명 (2024-12) | [뉴스1](https://www.news1.kr/it-science/game-review/6072224) · [이투데이](https://www.etoday.co.kr/news/view/2461205) | `[내가 확인]` |
@@ -50,10 +50,16 @@
 
 | 항목 | 대상 |
 |---|---|
-| 직원 수 | 넷마블몬스터, 하이퍼그리프, 호타 스튜디오(퍼펙트월드) |
+| 직원 수 | 넷마블몬스터, 호타 스튜디오(퍼펙트월드). 하이퍼그리프는 출처마다 784명~약 2,000명으로 차이가 커서 재확인 |
 | 회사 매출 | 쿠로게임즈, 미호요(호요버스), 하이퍼그리프, 호타 스튜디오 |
 | 인스타그램 공식 계정·팔로워 | 기준 브랜드 포함 7곳 전부 |
 | 최신 직원 수 | 쿠로게임즈(2024), 시프트업(2024-12), 넥슨게임즈(2024-12)는 1~2년 전 수치 |
+
+## 2차 보강에서 못 찾은 것
+- 7곳의 인스타그램 공식 계정과 팔로워: 검색 결과에 공식 계정 주소가 나오지 않아 그대로 `[내가 확인]`.
+- 쿠로게임즈 회사 매출과 최신 직원 수: 중국어 위키 페이지가 열리지 않아 찾지 못함.
+- 하이퍼그리프 회사 매출: 게임 단위 수치(엔드필드 2주 12억 위안)만 있고 회사 매출은 없음.
+- 넷마블몬스터 직원 수: 채용 사이트 검색 결과가 넷마블 본사 정보만 보여 줌.
 
 ## 그 밖의 참고 출처
 - [바이라인네트워크: 서브컬처 신작 경쟁 (2026-06-08)](https://byline.network/2026/06/5-436/)
