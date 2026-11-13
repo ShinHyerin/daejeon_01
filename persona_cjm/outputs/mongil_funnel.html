@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>몬길: 스타 다이브 CJM 6단계 퍼널 (가정값)</title>
+<style>
+  :root { --bg:#fff; --ink:#111; --sub:#555; --muted:#777; --line:#d6d6d6; --soft:#f4f4f4; --bar:#3a3a3a; --barhot:#111; --track:#ececec; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#161616; --ink:#f0f0f0; --sub:#b8b8b8; --muted:#9a9a9a; --line:#3a3a3a; --soft:#222; --bar:#bdbdbd; --barhot:#f0f0f0; --track:#2a2a2a; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif; line-height:1.6; font-size:16px; }
+  .wrap { max-width:960px; margin:0 auto; padding:32px 16px 72px; }
+  h1 { font-size:26px; line-height:1.3; margin:0 0 8px; }
+  h2 { font-size:19px; margin:36px 0 10px; padding-top:14px; border-top:1px solid var(--ink); }
+  p { margin:6px 0; }
+  .sub { color:var(--sub); font-size:14.5px; }
+  .assume { display:inline-block; border:1px solid var(--ink); font-size:11.5px; padding:0 6px; border-radius:10px; margin-left:4px; white-space:nowrap; vertical-align:middle; font-weight:400; }
+  .note { background:var(--soft); border-left:4px solid var(--ink); padding:12px 14px; font-size:14.5px; margin:14px 0; }
+  .tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:16px 0; }
+  .tile { border:1px solid var(--line); padding:12px; }
+  .tile .k { font-size:13px; color:var(--sub); }
+  .tile .v { font-size:24px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .tile .d { font-size:13px; color:var(--muted); }
+  .row { display:grid; grid-template-columns:190px 1fr; gap:12px; align-items:center; padding:5px 0; }
+  .row .name { font-size:14.5px; }
+  .row .name small { display:block; color:var(--muted); font-size:12.5px; }
+  .track { position:relative; height:34px; background:var(--track); border-radius:0 4px 4px 0; cursor:default; }
+  .bar { position:absolute; left:0; top:0; bottom:0; background:var(--bar); border-radius:0 4px 4px 0; transition:width .15s; min-width:2px; }
+  .row.hot .bar { background:var(--barhot); }
+  .val { position:absolute; top:50%; transform:translateY(-50%); font-size:14px; font-variant-numeric:tabular-nums; white-space:nowrap; padding:0 8px; color:var(--ink); }
+  .step { display:grid; grid-template-columns:190px 1fr; gap:12px; font-size:13px; color:var(--sub); }
+  .step span { padding:1px 0 1px 8px; border-left:2px solid var(--line); margin-left:6px; font-variant-numeric:tabular-nums; }
+  .step.hot span { color:var(--ink); font-weight:700; border-left-color:var(--ink); }
+  #tip { position:fixed; pointer-events:none; background:var(--ink); color:var(--bg); font-size:13px; padding:8px 10px; border-radius:4px; max-width:260px; display:none; z-index:10; line-height:1.5; }
+  .ctrl { display:grid; grid-template-columns:1fr 1fr; gap:14px 28px; }
+  .c label { display:flex; justify-content:space-between; align-items:baseline; gap:8px; font-size:14.5px; }
+  .c output { font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .c input[type=range] { width:100%; accent-color:var(--ink); margin:4px 0 0; }
+  .c small { color:var(--muted); font-size:12.5px; }
+  button { font:inherit; font-size:14px; background:var(--bg); color:var(--ink); border:1px solid var(--ink); padding:6px 14px; cursor:pointer; margin-top:16px; }
+  .scroll { overflow-x:auto; }
+  table { border-collapse:collapse; width:100%; font-size:14px; }
+  th, td { border:1px solid var(--line); padding:8px 10px; text-align:right; font-variant-numeric:tabular-nums; }
+  th { background:var(--soft); white-space:nowrap; }
+  th:first-child, td:first-child { text-align:left; }
+  footer { margin-top:40px; border-top:1px solid var(--line); padding-top:12px; color:var(--sub); font-size:13px; }
+  @media (max-width:700px) {
+    .tiles { grid-template-columns:1fr; }
+    .row, .step { grid-template-columns:1fr; gap:2px; }
+    .step span { margin-left:0; }
+    .ctrl { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>몬길: 스타 다이브 CJM 6단계 퍼널</h1>
+<p class="sub">1단계 1,000명 기준 단계별 잔존 인원 · 근거 CJM: <code>mongil_persona_cjm.md</code></p>
+<div class="note">
+  <b>이 화면의 모든 수치는 가정이다.</b> 실제 측정값이나 출처가 있는 값은 하나도 없다.
+  초기값은 "3단계(비교 &amp; 의심)를 넘어가는 비율이 가장 낮다"는 CJM 가설을 숫자로 옮긴 것이며, 아래 슬라이더로 바꿀 수 있다.
+</div>
+
+<div class="tiles">
+  <div class="tile"><div class="k">6단계까지 남는 인원 <span class="assume">가정</span></div><div class="v" id="tFinal"></div><div class="d" id="tFinalD"></div></div>
+  <div class="tile"><div class="k">전환율이 가장 낮은 구간 <span class="assume">가정</span></div><div class="v" id="tLeak"></div><div class="d" id="tLeakD"></div></div>
+  <div class="tile"><div class="k">5단계(첫 플레이) 도달 <span class="assume">가정</span></div><div class="v" id="tPlay"></div><div class="d" id="tPlayD"></div></div>
+</div>
+
+<h2>퍼널 차트 <span class="assume">전 수치 가정</span></h2>
+<p class="sub">막대 길이는 1단계 인원 대비 잔존 비율이다. 진한 막대는 직전 구간 전환율이 가장 낮은 단계다. 막대에 마우스를 올리면 그 단계의 고객 속마음과 이탈 이유가 보인다.</p>
+<div id="chart" role="img" aria-label="CJM 6단계 퍼널 차트. 수치는 아래 표와 같다."></div>
+
+<h2>가정값 조절</h2>
+<div class="ctrl" id="ctrl"></div>
+<button id="reset" type="button">초기 가정값으로 되돌리기</button>
+
+<h2>표로 보기 <span class="assume">전 수치 가정</span></h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>단계</th><th>잔존 인원 (가정)</th><th>1단계 대비 (가정)</th><th>직전 단계 전환율 (가정)</th><th>직전 구간 이탈 (가정)</th></tr></thead>
+  <tbody id="tbody"></tbody>
+</table>
+</div>
+
+<h2>이 가정을 실제 값으로 바꾸려면</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>구간</th><th style="text-align:left">측정할 것</th><th style="text-align:left">확인할 곳</th></tr></thead>
+  <tbody>
+    <tr><td>1 → 2</td><td style="text-align:left">영상·일러스트 조회 수 대비 검색·공식 채널 유입 수</td><td style="text-align:left">[실데이터 입력]</td></tr>
+    <tr><td>2 → 3</td><td style="text-align:left">탐색 유입 대비 설치 페이지 방문 수</td><td style="text-align:left">[실데이터 입력]</td></tr>
+    <tr><td>3 → 4</td><td style="text-align:left">설치 페이지 방문 대비 설치 수</td><td style="text-align:left">[실데이터 입력]</td></tr>
+    <tr><td>4 → 5</td><td style="text-align:left">설치 대비 첫 플레이(튜토리얼 완료) 수</td><td style="text-align:left">[실데이터 입력]</td></tr>
+    <tr><td>5 → 6</td><td style="text-align:left">첫 플레이 대비 재접속·친구 초대·인증 게시 수</td><td style="text-align:left">[실데이터 입력]</td></tr>
+  </tbody>
+</table>
+</div>
+
+<footer>모든 수치는 가정이며 넷마블의 공식 자료가 아니다 · 작성일 2026-11-13</footer>
+</div>
+<div id="tip"></div>
+
+<script>
+const STAGES = [
+  { n:'1 문제 자각', s:'영상·일러스트를 보고 관심', voice:'"하던 게임은 숙제만 남았네. 새로 할 거 없나…"', leave:'새 게임을 찾지 않고 지나침' },
+  { n:'2 릴스/검색 탐색', s:'검색하고 찾아봄', voice:'"이 캐릭터 예쁜데? 지금 시작해도 되나?"', leave:'기존 유저 기준 공략뿐이라 "이미 늦었네" 하고 닫음' },
+  { n:'3 비교 & 의심', s:'다른 게임과 비교하며 고민', voice:'"원신·명조는 너무 쌓였고, 몬길도 벌써 반년 넘었잖아."', leave:'따라잡을 분량을 가늠하다 포기' },
+  { n:'4 결정적 구매 트리거', s:'설치를 결정', voice:'"나처럼 늦게 시작한 사람이 이 정도면 할 만하네."', leave:'근거가 공식 홍보뿐이면 안 믿음' },
+  { n:'5 첫 사용', s:'첫 플레이', voice:'"재밌네. 근데 커뮤니티 가보니 다들 저만큼 갔네…"', leave:'남과 비교하는 순간 접속이 뜸해짐' },
+  { n:'6 자발적 바이럴/재구매', s:'계속 하고 주변에 추천', voice:'"늦게 시작했는데 할 만해. 너도 지금 와."', leave:'자랑할 계기가 없으면 혼자 하고 끝남' }
+];
+const DEFAULTS = { base:1000, rates:[60,55,35,70,40] };
+let state = JSON.parse(JSON.stringify(DEFAULTS));
+const fmt = x => Math.round(x).toLocaleString('ko-KR');
+const A = ' <span class="assume">가정</span>';
+
+function buildControls() {
+  const el = document.getElementById('ctrl');
+  let h = `<div class="c"><label for="base"><span>1단계 인원${A}</span><output id="oBase"></output></label>
+    <input type="range" id="base" min="100" max="10000" step="100" value="${state.base}"><small>기준 1,000명</small></div>`;
+  state.rates.forEach((r,i) => {
+    h += `<div class="c"><label for="r${i}"><span>${i+1} → ${i+2}단계 전환율${A}</span><output id="o${i}"></output></label>
+      <input type="range" id="r${i}" min="0" max="100" step="1" value="${r}"><small>${STAGES[i].n} → ${STAGES[i+1].n}</small></div>`;
+  });
+  el.innerHTML = h;
+  document.getElementById('base').addEventListener('input', e => { state.base = +e.target.value; render(); });
+  state.rates.forEach((_,i) => document.getElementById('r'+i).addEventListener('input', e => { state.rates[i] = +e.target.value; render(); }));
+}
+
+function compute() {
+  const c = [state.base];
+  state.rates.forEach(r => c.push(c[c.length-1] * r / 100));
+  const drops = c.slice(1).map((v,i) => c[i] - v);
+  let hot = 0; state.rates.forEach((r,i) => { if (r < state.rates[hot]) hot = i; });
+  return { c, drops, hot };
+}
+
+function render() {
+  const { c, drops, hot } = compute();
+  document.getElementById('oBase').textContent = fmt(state.base) + '명';
+  state.rates.forEach((r,i) => document.getElementById('o'+i).textContent = r + '%');
+
+  let h = '';
+  c.forEach((v,i) => {
+    if (i > 0) h += `<div class="step${i-1===hot?' hot':''}"><div></div><span>↓ 전환 ${state.rates[i-1]}% · 이탈 ${fmt(drops[i-1])}명 (가정)</span></div>`;
+    const pct = state.base ? v / state.base * 100 : 0;
+    const inside = pct > 62;
+    const pos = inside ? `right:${100-pct}%; color:var(--bg);` : `left:${pct}%;`;
+    h += `<div class="row${i>0&&i-1===hot?' hot':''}" data-i="${i}">
+      <div class="name">${STAGES[i].n}<small>${STAGES[i].s}</small></div>
+      <div class="track"><div class="bar" style="width:${pct}%"></div><div class="val" style="${pos}">${fmt(v)}명 · ${pct.toFixed(1)}% (가정)</div></div></div>`;
+  });
+  const chart = document.getElementById('chart');
+  chart.innerHTML = h;
+  chart.querySelectorAll('.row').forEach(r => {
+    r.addEventListener('mousemove', e => showTip(e, +r.dataset.i, c, drops));
+    r.addEventListener('mouseleave', () => document.getElementById('tip').style.display = 'none');
+  });
+
+  document.getElementById('tFinal').textContent = fmt(c[5]) + '명';
+  document.getElementById('tFinalD').textContent = `1단계 ${fmt(c[0])}명 중 ${(state.base? c[5]/c[0]*100 : 0).toFixed(1)}% (가정)`;
+  document.getElementById('tLeak').textContent = `${hot+1} → ${hot+2}단계`;
+  document.getElementById('tLeakD').textContent = `${fmt(drops[hot])}명 이탈 · 전환율 ${state.rates[hot]}% (가정)`;
+  document.getElementById('tPlay').textContent = fmt(c[4]) + '명';
+  document.getElementById('tPlayD').textContent = `1단계 대비 ${(state.base? c[4]/c[0]*100 : 0).toFixed(1)}% (가정)`;
+
+  document.getElementById('tbody').innerHTML = c.map((v,i) => `<tr><td>${STAGES[i].n}</td><td>${fmt(v)}명</td><td>${(state.base? v/c[0]*100 : 0).toFixed(1)}%</td><td>${i? state.rates[i-1]+'%' : '—'}</td><td>${i? fmt(drops[i-1])+'명' : '—'}</td></tr>`).join('');
+}
+
+function showTip(e, i, c, drops) {
+  const t = document.getElementById('tip');
+  t.innerHTML = `<b>${STAGES[i].n}</b><br>잔존 ${fmt(c[i])}명 (가정)` +
+    (i ? `<br>직전 구간 이탈 ${fmt(drops[i-1])}명 (가정)` : '') +
+    `<br><br>속마음: ${STAGES[i].voice}<br>이탈 이유: ${STAGES[i].leave}`;
+  t.style.display = 'block';
+  const w = t.offsetWidth, x = Math.min(e.clientX + 14, window.innerWidth - w - 8);
+  t.style.left = Math.max(8, x) + 'px';
+  t.style.top = (e.clientY + 16) + 'px';
+}
+
+document.getElementById('reset').addEventListener('click', () => {
+  state = JSON.parse(JSON.stringify(DEFAULTS));
+  document.getElementById('base').value = state.base;
+  state.rates.forEach((r,i) => document.getElementById('r'+i).value = r);
+  render();
+});
+buildControls();
+render();
+</script>
+</body>
+</html>
