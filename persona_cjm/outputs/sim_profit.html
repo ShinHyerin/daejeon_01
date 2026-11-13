@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>매출에서 이익까지 계산기</title>
+<style>
+  :root { --bg:#fff; --ink:#111; --sub:#555; --muted:#777; --line:#d6d6d6; --soft:#f4f4f4; --grid:#ececec; --plot:#2b2b2b; --neg:#9a9a9a; --ok-bd:#1d6b3a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#161616; --ink:#f0f0f0; --sub:#b8b8b8; --muted:#9a9a9a; --line:#3a3a3a; --soft:#222; --grid:#2c2c2c; --plot:#e6e6e6; --neg:#777; --ok-bd:#6cc48d; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif; line-height:1.6; font-size:16px; }
+  .wrap { max-width:980px; margin:0 auto; padding:28px 16px 64px; }
+  h1 { font-size:25px; line-height:1.3; margin:0 0 6px; }
+  h2 { font-size:19px; margin:34px 0 10px; padding-top:14px; border-top:1px solid var(--ink); }
+  h3 { font-size:15.5px; margin:16px 0 4px; }
+  p { margin:6px 0; }
+  a { color:inherit; }
+  .sub { color:var(--sub); font-size:14.5px; }
+  .num { font-variant-numeric:tabular-nums; }
+  .badge { display:inline-block; border:1px solid currentColor; font-size:11.5px; padding:0 6px; border-radius:10px; white-space:nowrap; vertical-align:middle; font-weight:400; margin-left:4px; }
+  .badge.ok { border-color:var(--ok-bd); color:var(--ok-bd); border-width:1.5px; font-weight:700; }
+
+  .ctrls { display:grid; grid-template-columns:1fr 1fr; gap:6px 28px; }
+  .ctl { margin:10px 0 4px; }
+  .ctl label, .ctl .lab { display:flex; justify-content:space-between; align-items:baseline; gap:8px; font-size:14.5px; flex-wrap:wrap; }
+  .ctl output { font-weight:700; white-space:nowrap; }
+  .ctl input[type=range] { width:100%; accent-color:var(--ink); margin:6px 0 0; }
+  .ctl select { width:100%; font:inherit; font-size:15px; padding:7px 8px; margin-top:6px; border:1px solid var(--ink); background:var(--bg); color:var(--ink); }
+  .ctl small { color:var(--muted); font-size:12.5px; display:block; }
+  .seg { display:flex; gap:0; margin-top:6px; }
+  .seg button { flex:1; font:inherit; font-size:14px; padding:8px 6px; border:1px solid var(--ink); background:var(--bg); color:var(--ink); cursor:pointer; }
+  .seg button + button { border-left:none; }
+  .seg button[aria-pressed=true] { background:var(--ink); color:var(--bg); font-weight:700; }
+
+  .tiles { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0; }
+  .tile { border:1px solid var(--line); padding:12px; }
+  .tile .k { font-size:13px; color:var(--sub); }
+  .tile .v { font-size:21px; font-weight:700; }
+  .tile .d { font-size:12.5px; color:var(--muted); }
+
+  /* 나무 */
+  .tree { border:1px solid var(--line); padding:12px 14px; }
+  .row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 12px; padding:7px 0; border-bottom:1px dashed var(--line); align-items:baseline; }
+  .row:last-child { border-bottom:none; }
+  .row .nm { font-size:14.5px; }
+  .row .val { font-weight:700; text-align:right; white-space:nowrap; }
+  .row .f { grid-column:1 / -1; font-size:12.5px; color:var(--muted); }
+  .l1 { padding-left:0; } .l2 { padding-left:18px; } .l3 { padding-left:36px; } .l4 { padding-left:54px; }
+  .row.total { border-top:2px solid var(--ink); border-bottom:none; margin-top:4px; padding-top:10px; }
+  .row.total .nm, .row.total .val { font-size:17px; font-weight:700; }
+  .row.minus .nm::before { content:"− "; color:var(--sub); }
+  .l2 .nm::before, .l3 .nm::before, .l4 .nm::before { content:"└ "; color:var(--muted); }
+
+  /* 그래프 */
+  .chart { border:1px solid var(--line); padding:10px 8px 4px; position:relative; }
+  svg { display:block; width:100%; height:auto; }
+  #tip { position:fixed; pointer-events:none; background:var(--ink); color:var(--bg); font-size:13px; padding:7px 10px; border-radius:4px; display:none; z-index:10; line-height:1.5; }
+
+  .scroll { overflow-x:auto; }
+  table { border-collapse:collapse; width:100%; font-size:14px; margin-top:10px; }
+  th, td { border:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top; }
+  th { background:var(--soft); white-space:nowrap; }
+  td.num, th.num { text-align:right; }
+  tr.cur td { font-weight:700; background:var(--soft); }
+
+  footer { margin-top:44px; border-top:1px solid var(--line); padding-top:14px; color:var(--sub); font-size:14px; font-weight:700; }
+  @media (max-width:700px) {
+    .ctrls { grid-template-columns:1fr; }
+    .tiles { grid-template-columns:1fr 1fr; }
+    .l2 { padding-left:10px; } .l3 { padding-left:20px; } .l4 { padding-left:30px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>매출에서 이익까지 계산기</h1>
+<p class="sub">몬길: 스타 다이브 게임 안 결제 기준. <b>1건 = 게임 안 결제 1번.</b></p>
+<p class="sub">객단가는 앱스토어에서 <span class="badge ok">확인됨</span> 가격 중에서 고른다. 그 밖의 값은 모두 <b>설명용 가정</b>이다.</p>
+
+<h2>입력</h2>
+<div class="ctrls">
+  <div>
+    <h3>매출 쪽</h3>
+    <div class="ctl"><label for="reach"><span>월 닿은 사람 수 <span class="badge">가정</span></span><output id="o-reach" class="num"></output></label>
+      <input type="range" id="reach" min="1000" max="1000000" step="1000"></div>
+    <div class="ctl"><label for="intent"><span>관심 전환율 <span class="badge">가정</span></span><output id="o-intent" class="num"></output></label>
+      <input type="range" id="intent" min="0.1" max="20" step="0.1"></div>
+    <div class="ctl"><label for="buy"><span>구매 전환율 <span class="badge">가정</span></span><output id="o-buy" class="num"></output></label>
+      <input type="range" id="buy" min="0.1" max="20" step="0.1"></div>
+    <div class="ctl"><label for="price"><span>객단가 (1건에 받는 돈) <span class="badge ok">확인됨</span></span><output id="o-price" class="num"></output></label>
+      <select id="price"></select>
+      <small>출처: <a href="https://apps.apple.com/kr/app/%EB%AA%AC%EA%B8%B8-star-dive/id6483252725" target="_blank" rel="noopener">App Store 한국 · 몬길: STAR DIVE 앱 내 구입</a> (2026-11-13 확인, <code>price_table.csv</code>). 상품 구성은 확인되지 않음.</small></div>
+  </div>
+  <div>
+    <h3>비용 쪽</h3>
+    <div class="ctl"><div class="lab"><span>결제 채널 <span class="badge ok">확인됨</span></span></div>
+      <div class="seg" role="group" aria-label="결제 채널">
+        <button type="button" id="chM" aria-pressed="true">모바일 마켓</button>
+        <button type="button" id="chP" aria-pressed="false">PC 런처 자체 결제</button>
+      </div>
+      <small>채널이 있다는 것만 확인됨: 모바일은 구글플레이·앱스토어, PC는 넷마블 런처 자체 결제 (<a href="https://www.inven.co.kr/webzine/news/?news=315626" target="_blank" rel="noopener">인벤</a>). 수수료율은 가정.</small></div>
+    <div class="ctl"><label for="mfee"><span>마켓 수수료율 <span class="badge">가정</span></span><output id="o-mfee" class="num"></output></label>
+      <input type="range" id="mfee" min="0" max="40" step="1"></div>
+    <div class="ctl"><label for="pfee"><span>PC 자체 결제 수수료율 <span class="badge">가정</span></span><output id="o-pfee" class="num"></output></label>
+      <input type="range" id="pfee" min="0" max="15" step="0.5"></div>
+    <div class="ctl"><label for="vat"><span>부가가치세율 (가격에 포함) <span class="badge">가정</span></span><output id="o-vat" class="num"></output></label>
+      <input type="range" id="vat" min="0" max="20" step="1"></div>
+    <div class="ctl"><label for="fixed"><span>월 고정비 <span class="badge">가정</span></span><output id="o-fixed" class="num"></output></label>
+      <input type="range" id="fixed" min="0" max="10000000" step="50000">
+      <small>건수와 상관없이 드는 돈 (서버, 인건비, 마케팅 등)</small></div>
+  </div>
+</div>
+
+<div class="tiles">
+  <div class="tile"><div class="k">월 매출 <span class="badge">가정</span></div><div class="v num" id="tRev"></div><div class="d num" id="tRevD"></div></div>
+  <div class="tile"><div class="k">1건당 남는 돈 <span class="badge">가정</span></div><div class="v num" id="tUnit"></div><div class="d num" id="tUnitD"></div></div>
+  <div class="tile"><div class="k">손익분기 건수 <span class="badge">가정</span></div><div class="v num" id="tBE"></div><div class="d num" id="tBED"></div></div>
+  <div class="tile"><div class="k">월 이익 <span class="badge">가정</span></div><div class="v num" id="tProfit"></div><div class="d num" id="tProfitD"></div></div>
+</div>
+
+<h2>인수분해 나무: 매출 → 이익</h2>
+<div class="tree" id="tree"></div>
+
+<h2>건수에 따른 월 이익</h2>
+<p class="sub">지금 조건(객단가·채널·수수료·고정비)에서 구매 건수만 바꿨을 때의 월 이익이다. 점선은 손익분기 건수, 점은 지금 건수. 선 위에 마우스를 올리면 값이 보인다.</p>
+<div class="chart"><svg id="chart" viewBox="0 0 720 300" role="img" aria-label="구매 건수에 따른 월 이익 선 그래프"></svg></div>
+
+<h2>가격 × 결제 채널: 1건당 남는 돈</h2>
+<p class="sub">확인된 가격 10개를 각각 두 채널로 팔 때 1건당 남는 돈이다. 굵은 줄이 지금 고른 가격. 수수료율과 부가세율은 위 슬라이더 값(가정)을 쓴다.</p>
+<div class="scroll">
+<table>
+  <thead><tr><th>상품 (확인됨)</th><th class="num">가격 (확인됨)</th><th class="num">모바일 마켓 1건당 남는 돈 (가정)</th><th class="num">PC 자체 결제 1건당 남는 돈 (가정)</th><th class="num">채널 차이 (가정)</th><th class="num">손익분기 건수 모바일 / PC (가정)</th></tr></thead>
+  <tbody id="tbl"></tbody>
+</table>
+</div>
+
+<footer>가정값은 학습용이며 실제 원가·비용이 아닙니다.</footer>
+</div>
+<div id="tip"></div>
+
+<script>
+// 확인된 가격: price_table.csv (App Store 한국, 2026-11-13)
+const PRICES = [
+  ['특별 상품 1',1500],['특별 상품 4',6000],['특별 상품 7',9900],['샛별의 서약',9900],['특별 상품 8',12000],
+  ['특별 상품 10',15000],['특별 상품 13',20000],['특별 상품 17',26000],['특별 상품 22',33000],['특별 상품 40',60000]
+];
+// 설명용 가정 초기값
+const S = { reach:100000, intent:1, buy:3, priceIdx:3, channel:'M', mfee:30, pfee:5, vat:10, fixed:500000 };
+
+const won = x => (x < 0 ? '−' : '') + Math.round(Math.abs(x)).toLocaleString('ko-KR') + '원';
+const n1 = x => (Math.round(x*10)/10).toLocaleString('ko-KR');
+const pct = x => (Math.round(x*100)/100).toLocaleString('ko-KR') + '%';
+
+function unitOf(price, ch) {
+  const vat = price * (S.vat/100) / (1 + S.vat/100);
+  const feeRate = ch === 'M' ? S.mfee : S.pfee;
+  const fee = price * feeRate / 100;
+  return { price, vat, fee, feeRate, unit: price - vat - fee };
+}
+function calc() {
+  const price = PRICES[S.priceIdx][1];
+  const interest = S.reach * S.intent / 100;
+  const orders = interest * S.buy / 100;
+  const revenue = orders * price;
+  const u = unitOf(price, S.channel);
+  const profit = orders * u.unit - S.fixed;
+  const be = u.unit > 0 ? S.fixed / u.unit : Infinity;
+  return { price, interest, orders, revenue, u, profit, be };
+}
+
+function bind() {
+  const sel = document.getElementById('price');
+  sel.innerHTML = PRICES.map((p,i) => `<option value="${i}">${p[0]} · ₩${p[1].toLocaleString('ko-KR')}</option>`).join('');
+  sel.value = S.priceIdx;
+  sel.addEventListener('change', e => { S.priceIdx = +e.target.value; render(); });
+  ['reach','intent','buy','mfee','pfee','vat','fixed'].forEach(k => {
+    const el = document.getElementById(k); el.value = S[k];
+    el.addEventListener('input', e => { S[k] = +e.target.value; render(); });
+  });
+  const setCh = ch => { S.channel = ch; document.getElementById('chM').setAttribute('aria-pressed', ch==='M'); document.getElementById('chP').setAttribute('aria-pressed', ch==='P'); render(); };
+  document.getElementById('chM').addEventListener('click', () => setCh('M'));
+  document.getElementById('chP').addEventListener('click', () => setCh('P'));
+}
+
+function row(level, name, val, f, cls='') {
+  return `<div class="row l${level} ${cls}"><span class="nm">${name}</span><span class="val num">${val}</span>${f ? `<span class="f num">${f}</span>` : ''}</div>`;
+}
+
+function render() {
+  const r = calc(), u = r.u;
+  document.getElementById('o-reach').textContent = S.reach.toLocaleString('ko-KR') + '명';
+  document.getElementById('o-intent').textContent = pct(S.intent);
+  document.getElementById('o-buy').textContent = pct(S.buy);
+  document.getElementById('o-price').textContent = won(r.price);
+  document.getElementById('o-mfee').textContent = pct(S.mfee);
+  document.getElementById('o-pfee').textContent = pct(S.pfee);
+  document.getElementById('o-vat').textContent = pct(S.vat);
+  document.getElementById('o-fixed').textContent = won(S.fixed);
+  const chName = S.channel === 'M' ? '마켓 수수료' : 'PC 자체 결제 수수료';
+
+  document.getElementById('tRev').textContent = won(r.revenue);
+  document.getElementById('tRevD').textContent = `${n1(r.orders)}건 × ${won(r.price)}`;
+  document.getElementById('tUnit').textContent = won(u.unit);
+  document.getElementById('tUnitD').textContent = `${won(r.price)} − 부가세 ${won(u.vat)} − 수수료 ${won(u.fee)}`;
+  document.getElementById('tBE').textContent = isFinite(r.be) ? Math.ceil(r.be).toLocaleString('ko-KR') + '건' : '도달 불가';
+  document.getElementById('tBED').textContent = isFinite(r.be) ? `${won(S.fixed)} ÷ ${won(u.unit)} = ${n1(r.be)}건 → 올림` : '1건당 남는 돈이 0원 이하';
+  document.getElementById('tProfit').textContent = won(r.profit);
+  document.getElementById('tProfitD').textContent = r.profit >= 0 ? '흑자' : `손익분기까지 ${isFinite(r.be) ? Math.max(0, Math.ceil(r.be - r.orders)).toLocaleString('ko-KR') + '건 더' : '—'}`;
+
+  document.getElementById('tree').innerHTML =
+    row(1, '월 매출 (가정)', won(r.revenue), `구매 건수 ${n1(r.orders)}건 × 객단가 ${won(r.price)}`) +
+    row(2, '구매 건수', n1(r.orders) + '건', `관심 고객 ${n1(r.interest)}명 × 구매 전환율 ${pct(S.buy)}`) +
+    row(3, '관심 고객 수', n1(r.interest) + '명', `닿은 사람 ${S.reach.toLocaleString('ko-KR')}명 × 관심 전환율 ${pct(S.intent)}`) +
+    row(4, '닿은 사람 수', S.reach.toLocaleString('ko-KR') + '명', '') +
+    row(4, '관심 전환율', pct(S.intent), '') +
+    row(3, '구매 전환율', pct(S.buy), '') +
+    row(2, '객단가 (확인됨)', won(r.price), PRICES[S.priceIdx][0] + ' · App Store 한국') +
+    row(1, '건당 비용 합계', won(r.orders * (u.vat + u.fee)), `구매 건수 ${n1(r.orders)}건 × (부가세 ${won(u.vat)} + ${chName} ${won(u.fee)})`, 'minus') +
+    row(2, '부가세', won(u.vat) + ' /건', `${won(r.price)} × ${S.vat}/${100 + S.vat} (가격에 포함된 부가세)`) +
+    row(2, chName, won(u.fee) + ' /건', `${won(r.price)} × ${pct(u.feeRate)}`) +
+    row(1, '= 공헌이익 (건수 × 1건당 남는 돈)', won(r.orders * u.unit), `${n1(r.orders)}건 × ${won(u.unit)}`) +
+    row(1, '월 고정비', won(S.fixed), '', 'minus') +
+    row(1, '월 이익 (가정)', won(r.profit), `${won(r.orders * u.unit)} − ${won(S.fixed)}`, 'total');
+
+  drawChart(r);
+  drawTable(r);
+}
+
+function niceMax(v) { if (v <= 0) return 10; const e = Math.pow(10, Math.floor(Math.log10(v))); const f = v / e; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * e; }
+
+function drawChart(r) {
+  const svg = document.getElementById('chart');
+  const W = Math.max(320, Math.round(svg.parentElement.clientWidth - 16)), H = W < 500 ? 260 : 300, L = W < 500 ? 56 : 84, R = 16, T = 16, B = 40;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const u = r.u.unit;
+  const xMax = niceMax(Math.max(10, isFinite(r.be) ? r.be * 2 : 0, r.orders * 1.5));
+  const yAt = x => x * u - S.fixed;
+  const y0 = yAt(0), y1 = yAt(xMax);
+  let yMin = Math.min(y0, y1, 0), yMaxV = Math.max(y0, y1, 0);
+  const span = niceMax((yMaxV - yMin) || 1);
+  const step = span / 4;
+  yMin = Math.floor(yMin / step) * step; yMaxV = Math.ceil(yMaxV / step) * step;
+  if (yMaxV === yMin) yMaxV = yMin + step;
+  const sx = x => L + (x / xMax) * (W - L - R);
+  const sy = y => T + (1 - (y - yMin) / (yMaxV - yMin)) * (H - T - B);
+  const css = getComputedStyle(document.documentElement);
+  const c = k => css.getPropertyValue(k).trim();
+  let g = '';
+  for (let y = yMin; y <= yMaxV + 1e-6; y += step) {
+    g += `<line x1="${L}" x2="${W-R}" y1="${sy(y)}" y2="${sy(y)}" stroke="${y === 0 ? c('--sub') : c('--grid')}" stroke-width="${y === 0 ? 1.5 : 1}"/>`;
+    g += `<text x="${L-8}" y="${sy(y)+4}" text-anchor="end" font-size="12" fill="${c('--muted')}">${shortWon(y)}</text>`;
+  }
+  for (let i = 0; i <= 5; i++) {
+    const x = xMax * i / 5;
+    g += `<text x="${sx(x)}" y="${H-B+18}" text-anchor="middle" font-size="12" fill="${c('--muted')}">${Math.round(x).toLocaleString('ko-KR')}</text>`;
+  }
+  g += `<text x="${(L+W-R)/2}" y="${H-4}" text-anchor="middle" font-size="12" fill="${c('--sub')}">월 구매 건수 (건, 가정)</text>`;
+  if (isFinite(r.be) && r.be <= xMax) {
+    g += `<line x1="${sx(r.be)}" x2="${sx(r.be)}" y1="${T}" y2="${H-B}" stroke="${c('--sub')}" stroke-dasharray="4 4"/>`;
+    g += `<text x="${sx(r.be)+6}" y="${T+14}" font-size="12" fill="${c('--ink')}">손익분기 ${Math.ceil(r.be).toLocaleString('ko-KR')}건</text>`;
+  }
+  g += `<line x1="${sx(0)}" y1="${sy(y0)}" x2="${sx(xMax)}" y2="${sy(y1)}" stroke="${c('--plot')}" stroke-width="2" stroke-linecap="round"/>`;
+  if (r.orders <= xMax) {
+    g += `<circle cx="${sx(r.orders)}" cy="${sy(r.profit)}" r="6" fill="${c('--plot')}" stroke="${c('--bg')}" stroke-width="2"/>`;
+    g += `<text x="${sx(r.orders)+9}" y="${sy(r.profit) + (r.profit < 0 ? 18 : -10)}" font-size="12" fill="${c('--ink')}">지금 ${n1(r.orders)}건 · ${shortWon(r.profit)}</text>`;
+  }
+  g += `<rect id="hit" x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent"/>`;
+  g += `<line id="cross" x1="0" x2="0" y1="${T}" y2="${H-B}" stroke="${c('--sub')}" stroke-width="1" visibility="hidden"/>`;
+  svg.innerHTML = g;
+  const tip = document.getElementById('tip'), cross = document.getElementById('cross');
+  const hit = document.getElementById('hit');
+  const move = ev => {
+    const pt = svg.createSVGPoint(); const e = ev.touches ? ev.touches[0] : ev;
+    pt.x = e.clientX; pt.y = e.clientY;
+    const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+    const x = Math.max(0, Math.min(xMax, (p.x - L) / (W - L - R) * xMax));
+    const xr = Math.round(x);
+    cross.setAttribute('x1', sx(xr)); cross.setAttribute('x2', sx(xr)); cross.setAttribute('visibility', 'visible');
+    tip.innerHTML = `${xr.toLocaleString('ko-KR')}건 (가정)<br>월 이익 ${won(yAt(xr))}<br><span style="opacity:.8">${xr.toLocaleString('ko-KR')} × ${won(u)} − ${won(S.fixed)}</span>`;
+    tip.style.display = 'block';
+    const tx = Math.min(e.clientX + 14, window.innerWidth - tip.offsetWidth - 8);
+    tip.style.left = Math.max(8, tx) + 'px'; tip.style.top = (e.clientY + 14) + 'px';
+  };
+  const leave = () => { tip.style.display = 'none'; cross.setAttribute('visibility', 'hidden'); };
+  hit.addEventListener('mousemove', move); hit.addEventListener('touchmove', move, {passive:true});
+  hit.addEventListener('mouseleave', leave); hit.addEventListener('touchend', leave);
+}
+function shortWon(v) {
+  const a = Math.abs(v), s = v < 0 ? '−' : '';
+  if (a >= 1e8) return s + (Math.round(a/1e7)/10) + '억';
+  if (a >= 1e4) return s + (Math.round(a/1e3)/10).toLocaleString('ko-KR') + '만';
+  return s + Math.round(a).toLocaleString('ko-KR');
+}
+
+function drawTable(r) {
+  document.getElementById('tbl').innerHTML = PRICES.map((p, i) => {
+    const m = unitOf(p[1], 'M'), pc = unitOf(p[1], 'P');
+    const bm = m.unit > 0 ? Math.ceil(S.fixed / m.unit).toLocaleString('ko-KR') : '불가';
+    const bp = pc.unit > 0 ? Math.ceil(S.fixed / pc.unit).toLocaleString('ko-KR') : '불가';
+    return `<tr class="${i === S.priceIdx ? 'cur' : ''}"><td>${p[0]}</td><td class="num">${won(p[1])}</td>
+      <td class="num">${won(m.unit)}</td><td class="num">${won(pc.unit)}</td><td class="num">+${won(pc.unit - m.unit)}</td><td class="num">${bm} / ${bp}건</td></tr>`;
+  }).join('');
+}
+
+bind();
+render();
+window.addEventListener('resize', () => drawChart(calc()));
+</script>
+</body>
+</html>

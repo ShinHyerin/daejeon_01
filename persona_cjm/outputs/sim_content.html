@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>매출 인수분해 시뮬레이터</title>
+<style>
+  :root { --bg:#fff; --ink:#111; --sub:#555; --muted:#777; --line:#d6d6d6; --soft:#f4f4f4; --hi:#111; --track:#e4e4e4; --warn-bg:#fff4e0; --warn-line:#b26b00; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#161616; --ink:#f0f0f0; --sub:#b8b8b8; --muted:#9a9a9a; --line:#3a3a3a; --soft:#222; --hi:#f0f0f0; --track:#333; --warn-bg:#3a2a10; --warn-line:#e0a040; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif; line-height:1.6; font-size:16px; }
+  .wrap { max-width:980px; margin:0 auto; padding:28px 16px 64px; }
+  h1 { font-size:25px; line-height:1.3; margin:0 0 6px; }
+  h2 { font-size:19px; margin:34px 0 10px; padding-top:14px; border-top:1px solid var(--ink); }
+  p { margin:6px 0; }
+  .sub { color:var(--sub); font-size:14.5px; }
+  .badge { display:inline-block; border:1px solid currentColor; font-size:11.5px; padding:0 6px; border-radius:10px; white-space:nowrap; vertical-align:middle; font-weight:400; margin-left:4px; }
+  .num { font-variant-numeric:tabular-nums; }
+  code { font-size:13.5px; }
+
+  /* 나무 */
+  .tree { display:flex; flex-direction:column; align-items:center; gap:0; }
+  .node { border:1.5px solid var(--ink); background:var(--bg); padding:10px 12px; text-align:center; min-width:0; }
+  .node .k { font-size:13px; color:var(--sub); }
+  .node .v { font-size:20px; font-weight:700; }
+  .node .f { font-size:12.5px; color:var(--muted); margin-top:2px; word-break:keep-all; }
+  .node.leaf { border-style:dashed; }
+  .node.root { border-width:2.5px; }
+  .vline { width:2px; height:18px; background:var(--line); }
+  .split { display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; position:relative; }
+  .split::before { content:""; position:absolute; top:0; left:25%; right:25%; height:2px; background:var(--line); }
+  .col { display:flex; flex-direction:column; align-items:center; }
+  .col .vline:first-child { height:16px; }
+  .tree .node { width:100%; max-width:440px; }
+  .split .node { max-width:none; }
+  .op { font-size:13px; color:var(--muted); margin:2px 0; }
+
+  /* 시나리오 */
+  .sets { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .set { border:1px solid var(--line); padding:14px; }
+  .set h3 { margin:0 0 8px; font-size:16px; }
+  .ctl { margin:12px 0 4px; }
+  .ctl label { display:flex; justify-content:space-between; align-items:baseline; gap:8px; font-size:14.5px; }
+  .ctl output { font-weight:700; white-space:nowrap; }
+  .ctl input[type=range] { width:100%; accent-color:var(--ink); margin:6px 0 0; }
+  .ctl input[type=range]:disabled { opacity:.35; }
+  .lock { font-size:12.5px; color:var(--sub); display:flex; align-items:center; gap:6px; margin-top:2px; }
+  .lock input { accent-color:var(--ink); }
+  .lockmsg { font-size:12.5px; color:var(--muted); }
+  .rev { margin-top:12px; padding-top:10px; border-top:1px solid var(--line); font-size:14px; }
+  .rev b { font-size:19px; }
+
+  .diff { margin:14px 0 0; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .tile { border:1px solid var(--line); padding:12px; }
+  .tile .k { font-size:13px; color:var(--sub); }
+  .tile .v { font-size:22px; font-weight:700; }
+
+  .diag { margin:14px 0 0; padding:12px 14px; border-left:4px solid var(--line); background:var(--soft); font-size:15px; }
+  .diag.warn { border-left-color:var(--warn-line); background:var(--warn-bg); }
+
+  /* 거꾸로 계산 */
+  .goal { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .goal input[type=number] { font:inherit; font-size:16px; padding:8px 10px; border:1px solid var(--ink); background:var(--bg); color:var(--ink); width:220px; max-width:100%; }
+  .goal select { font:inherit; font-size:15px; padding:8px; border:1px solid var(--ink); background:var(--bg); color:var(--ink); }
+  .scroll { overflow-x:auto; }
+  table { border-collapse:collapse; width:100%; font-size:14px; margin-top:12px; }
+  th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--soft); white-space:nowrap; }
+  td.num, th.num { text-align:right; }
+
+  footer { margin-top:44px; border-top:1px solid var(--line); padding-top:14px; color:var(--sub); font-size:14px; font-weight:700; }
+
+  @media (max-width:640px) {
+    .sets, .diff { grid-template-columns:1fr; }
+    .node .v { font-size:17px; }
+    .split { gap:8px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>매출 인수분해 시뮬레이터</h1>
+<p class="sub">매출 = 닿은 사람 수 × 관심 전환율 × 구매 전환율 × 객단가</p>
+<p class="sub">초기값 100,000명 / 1% / 3% / 30,000원은 <b>설명용 가정</b>이다. 개선안도 기준안과 같은 값으로 시작한다.</p>
+
+<h2>1. 인수분해 나무 <span class="badge">가정</span></h2>
+<p class="sub">아래 슬라이더를 움직이면 나무의 값이 바뀐다. 나무는 <b><span id="treeWhich">개선안</span></b> 기준이다.
+  <select id="treeSel" aria-label="나무에 표시할 안"><option value="b">개선안</option><option value="a">기준안</option></select></p>
+<div class="tree" id="tree"></div>
+
+<h2>2. 기준안 vs 개선안</h2>
+<div class="sets" id="sets"></div>
+<div class="diff">
+  <div class="tile"><div class="k">매출 차이 (원) <span class="badge">가정</span></div><div class="v num" id="dWon"></div></div>
+  <div class="tile"><div class="k">매출 차이 (%) <span class="badge">가정</span></div><div class="v num" id="dPct"></div></div>
+  <div class="tile"><div class="k">구매 건수 차이 <span class="badge">가정</span></div><div class="v num" id="dCnt"></div></div>
+</div>
+<div class="diag" id="diag" role="status"></div>
+
+<h2>3. 거꾸로 계산</h2>
+<p class="sub">목표 매출을 넣으면, 나머지 값이 그대로일 때 각 비율이 얼마여야 하는지 보여준다.</p>
+<div class="goal">
+  <label for="goal">목표 매출(원)</label>
+  <input type="number" id="goal" min="0" step="10000" value="1000000" inputmode="numeric">
+  <select id="goalBase" aria-label="기준이 되는 안"><option value="a">기준안 값 기준</option><option value="b">개선안 값 기준</option></select>
+</div>
+<div class="scroll">
+<table>
+  <thead><tr><th>바꿀 비율</th><th class="num">지금 값</th><th class="num">필요한 값</th><th>계산식</th><th>판단</th></tr></thead>
+  <tbody id="back"></tbody>
+</table>
+</div>
+
+<footer>모든 수치는 학습용 가정이며 실제 성과가 아닙니다.</footer>
+</div>
+
+<script>
+const PIECES = [
+  { key:'reach',  name:'닿은 사람 수', unit:'명', min:1000, max:1000000, step:1000 },
+  { key:'intent', name:'관심 전환율',  unit:'%',  min:0.1,  max:20,      step:0.1 },
+  { key:'buy',    name:'구매 전환율',  unit:'%',  min:0.1,  max:20,      step:0.1 },
+  { key:'aov',    name:'객단가',       unit:'원', min:1000, max:200000,  step:1000 }
+];
+const INIT = { reach:100000, intent:1, buy:3, aov:30000 };
+const S = { a:{...INIT}, b:{...INIT} };
+let reachLocked = true;
+
+const won = x => Math.round(x).toLocaleString('ko-KR') + '원';
+const ppl = x => (Math.round(x*10)/10).toLocaleString('ko-KR');
+const pct = x => (Math.round(x*100)/100).toLocaleString('ko-KR') + '%';
+const fmtPiece = (p, v) => p.unit === '%' ? pct(v) : p.unit === '원' ? won(v) : Math.round(v).toLocaleString('ko-KR') + '명';
+
+function calc(s) {
+  const interest = s.reach * s.intent / 100;
+  const orders = interest * s.buy / 100;
+  const revenue = orders * s.aov;
+  return { interest, orders, revenue };
+}
+
+function buildSets() {
+  const el = document.getElementById('sets');
+  el.innerHTML = ['a','b'].map(id => {
+    const title = id === 'a' ? '기준안' : '개선안';
+    const ctrls = PIECES.map(p => `
+      <div class="ctl">
+        <label for="${id}-${p.key}"><span>${p.name} <span class="badge">가정</span></span><output id="o-${id}-${p.key}" class="num"></output></label>
+        <input type="range" id="${id}-${p.key}" min="${p.min}" max="${p.max}" step="${p.step}" value="${S[id][p.key]}">
+        ${p.key === 'reach' ? `<div class="lock"><input type="checkbox" id="lock-${id}" checked><label for="lock-${id}">잠금</label></div><div class="lockmsg" id="lockmsg-${id}">이 값을 늘리는 일은 오늘 범위 밖이에요. 잠금을 풀면 바꿀 수 있어요.</div>` : ''}
+      </div>`).join('');
+    return `<div class="set"><h3>${title}</h3>${ctrls}<div class="rev">매출 <b class="num" id="rev-${id}"></b><div class="sub num" id="revf-${id}"></div></div></div>`;
+  }).join('');
+  ['a','b'].forEach(id => {
+    PIECES.forEach(p => document.getElementById(`${id}-${p.key}`).addEventListener('input', e => { S[id][p.key] = +e.target.value; render(); }));
+    document.getElementById(`lock-${id}`).addEventListener('change', e => { reachLocked = e.target.checked; syncLock(); });
+  });
+  syncLock();
+}
+
+function syncLock() {
+  ['a','b'].forEach(id => {
+    document.getElementById(`${id}-reach`).disabled = reachLocked;
+    document.getElementById(`lock-${id}`).checked = reachLocked;
+    document.getElementById(`lockmsg-${id}`).style.display = reachLocked ? 'block' : 'none';
+  });
+}
+
+function node(label, value, formula, cls='') {
+  return `<div class="node ${cls}"><div class="k">${label} <span class="badge">가정</span></div><div class="v num">${value}</div><div class="f num">${formula}</div></div>`;
+}
+
+function renderTree() {
+  const id = document.getElementById('treeSel').value;
+  document.getElementById('treeWhich').textContent = id === 'a' ? '기준안' : '개선안';
+  const s = S[id], r = calc(s);
+  document.getElementById('tree').innerHTML = `
+    ${node('매출', won(r.revenue), `구매 건수 ${ppl(r.orders)}건 × 객단가 ${won(s.aov)}`, 'root')}
+    <div class="vline"></div>
+    <div class="split">
+      <div class="col"><div class="vline"></div>${node('구매 건수', ppl(r.orders) + '건', `관심 고객 ${ppl(r.interest)}명 × 구매 전환율 ${pct(s.buy)}`)}</div>
+      <div class="col"><div class="vline"></div>${node('객단가', won(s.aov), '슬라이더 값', 'leaf')}</div>
+    </div>
+    <div class="split" style="margin-top:0">
+      <div class="col"><div class="vline"></div>
+        ${node('관심 고객 수', ppl(r.interest) + '명', `닿은 사람 ${Math.round(s.reach).toLocaleString('ko-KR')}명 × 관심 전환율 ${pct(s.intent)}`)}
+      </div>
+      <div class="col"><div class="vline"></div>${node('구매 전환율', pct(s.buy), '슬라이더 값', 'leaf')}</div>
+    </div>
+    <div class="split" style="margin-top:0">
+      <div class="col"><div class="vline"></div>
+        <div class="split" style="gap:6px">
+          <div class="col"><div class="vline"></div>${node('닿은 사람 수', Math.round(s.reach).toLocaleString('ko-KR') + '명', reachLocked ? '잠김 · 오늘 범위 밖' : '슬라이더 값', 'leaf')}</div>
+          <div class="col"><div class="vline"></div>${node('관심 전환율', pct(s.intent), '슬라이더 값', 'leaf')}</div>
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>`;
+}
+
+function render() {
+  const ra = calc(S.a), rb = calc(S.b);
+  ['a','b'].forEach(id => {
+    const s = S[id], r = id === 'a' ? ra : rb;
+    PIECES.forEach(p => document.getElementById(`o-${id}-${p.key}`).textContent = fmtPiece(p, s[p.key]));
+    document.getElementById(`rev-${id}`).textContent = won(r.revenue);
+    document.getElementById(`revf-${id}`).textContent =
+      `${Math.round(s.reach).toLocaleString('ko-KR')} × ${pct(s.intent)} × ${pct(s.buy)} × ${won(s.aov)}`;
+  });
+  const d = rb.revenue - ra.revenue;
+  document.getElementById('dWon').textContent = (d > 0 ? '+' : '') + won(d);
+  document.getElementById('dPct').textContent = ra.revenue > 0 ? (d > 0 ? '+' : '') + pct(d / ra.revenue * 100) : '—';
+  const dc = rb.orders - ra.orders;
+  document.getElementById('dCnt').textContent = (dc > 0 ? '+' : '') + ppl(dc) + '건';
+
+  const diag = document.getElementById('diag');
+  if (S.b.intent > S.a.intent && S.b.buy < S.a.buy) {
+    diag.className = 'diag warn';
+    diag.textContent = `⚠ 개선안의 관심 전환율은 높은데(${pct(S.a.intent)} → ${pct(S.b.intent)}) 구매 전환율은 낮아요(${pct(S.a.buy)} → ${pct(S.b.buy)}). 안 살 사람까지 끌어온 것일 수 있어요.`;
+  } else {
+    diag.className = 'diag';
+    diag.textContent = '진단: 개선안이 관심 전환율을 올리면서 구매 전환율을 떨어뜨리는 경우에 경고가 뜹니다. 지금은 해당하지 않아요.';
+  }
+  renderTree();
+  renderBack();
+}
+
+function renderBack() {
+  const goal = +document.getElementById('goal').value || 0;
+  const id = document.getElementById('goalBase').value;
+  const s = S[id];
+  const rows = [];
+  const needIntent = s.reach * (s.buy/100) * s.aov > 0 ? goal / (s.reach * (s.buy/100) * s.aov) * 100 : NaN;
+  const needBuy = s.reach * (s.intent/100) * s.aov > 0 ? goal / (s.reach * (s.intent/100) * s.aov) * 100 : NaN;
+  const judge = (need, now) => !isFinite(need) ? '계산 불가' : need > 100 ? '100%를 넘어 이 비율만으로는 불가능' : need <= now ? '지금 값으로 이미 달성' : `지금의 ${(need/now).toFixed(1)}배 필요`;
+  rows.push(`<tr><td>관심 전환율</td><td class="num">${pct(s.intent)}</td><td class="num"><b>${isFinite(needIntent) ? pct(needIntent) : '—'}</b></td>
+    <td class="num">${won(goal)} ÷ (${Math.round(s.reach).toLocaleString('ko-KR')} × ${pct(s.buy)} × ${won(s.aov)})</td><td>${judge(needIntent, s.intent)}</td></tr>`);
+  rows.push(`<tr><td>구매 전환율</td><td class="num">${pct(s.buy)}</td><td class="num"><b>${isFinite(needBuy) ? pct(needBuy) : '—'}</b></td>
+    <td class="num">${won(goal)} ÷ (${Math.round(s.reach).toLocaleString('ko-KR')} × ${pct(s.intent)} × ${won(s.aov)})</td><td>${judge(needBuy, s.buy)}</td></tr>`);
+  document.getElementById('back').innerHTML = rows.join('');
+}
+
+document.getElementById('treeSel').addEventListener('change', renderTree);
+document.getElementById('goal').addEventListener('input', renderBack);
+document.getElementById('goalBase').addEventListener('change', renderBack);
+buildSets();
+render();
+
+// 확인용: window.__setB({reach, intent, buy, aov})
+window.__setB = v => { Object.assign(S.b, v); PIECES.forEach(p => document.getElementById('b-'+p.key).value = S.b[p.key]); render(); return calc(S.b).revenue; };
+</script>
+</body>
+</html>

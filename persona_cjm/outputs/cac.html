@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>고객 획득 비용(CAC) 계산기</title>
+<style>
+  :root { --bg:#fff; --ink:#111; --sub:#555; --muted:#777; --line:#d6d6d6; --soft:#f4f4f4; --ok:#1d6b3a; --bad:#a23b2a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#161616; --ink:#f0f0f0; --sub:#b8b8b8; --muted:#9a9a9a; --line:#3a3a3a; --soft:#222; --ok:#6cc48d; --bad:#e58a78; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif; line-height:1.6; font-size:16px; }
+  .wrap { max-width:1040px; margin:0 auto; padding:28px 16px 64px; }
+  h1 { font-size:25px; line-height:1.3; margin:0 0 6px; }
+  h2 { font-size:19px; margin:34px 0 10px; padding-top:14px; border-top:1px solid var(--ink); }
+  h3 { font-size:16px; margin:0 0 6px; }
+  p { margin:6px 0; }
+  .sub { color:var(--sub); font-size:14.5px; }
+  .num { font-variant-numeric:tabular-nums; }
+  .badge { display:inline-block; border:1px solid currentColor; font-size:11px; padding:0 6px; border-radius:10px; white-space:nowrap; vertical-align:middle; font-weight:400; margin-left:4px; }
+  .note { background:var(--soft); border-left:4px solid var(--ink); padding:10px 14px; font-size:14.5px; margin:12px 0; }
+
+  .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .card { border:1px solid var(--line); padding:14px; min-width:0; }
+  .card .desc { font-size:13px; color:var(--muted); margin-bottom:6px; }
+  .in { margin:8px 0; }
+  .in label { display:flex; justify-content:space-between; align-items:baseline; gap:6px; font-size:13.5px; }
+  .in .field { display:flex; align-items:center; gap:6px; margin-top:3px; }
+  .in input { flex:1; min-width:0; font:inherit; font-size:15px; padding:6px 8px; border:1px solid var(--ink); background:var(--bg); color:var(--ink); text-align:right; font-variant-numeric:tabular-nums; }
+  .in .u { font-size:13px; color:var(--sub); width:22px; }
+  .grp { font-size:12.5px; color:var(--sub); margin:12px 0 2px; padding-top:8px; border-top:1px dashed var(--line); }
+
+  .calc { margin-top:12px; padding-top:10px; border-top:1px solid var(--ink); font-size:13.5px; }
+  .step { margin:8px 0; }
+  .step .t { font-weight:700; font-size:13.5px; }
+  .step .eq { color:var(--sub); word-break:keep-all; }
+  .step .r { font-weight:700; font-size:16px; }
+  .match { display:inline-block; font-size:12.5px; font-weight:700; padding:1px 8px; border:1.5px solid currentColor; border-radius:10px; margin-top:4px; }
+  .match.ok { color:var(--ok); } .match.bad { color:var(--bad); }
+
+  .scroll { overflow-x:auto; }
+  table { border-collapse:collapse; width:100%; font-size:14px; margin-top:10px; }
+  th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--soft); white-space:nowrap; }
+  td.num, th.num { text-align:right; white-space:nowrap; }
+  td .eq { display:block; font-size:12px; color:var(--muted); white-space:nowrap; }
+  .rank { font-size:12px; color:var(--sub); }
+  .best { font-weight:700; }
+
+  .verify { border:1.5px solid var(--ink); padding:12px 14px; margin-top:12px; font-size:14.5px; }
+  .verify .r { font-weight:700; }
+
+  footer { margin-top:44px; border-top:1px solid var(--line); padding-top:14px; color:var(--sub); font-size:14px; font-weight:700; }
+  @media (max-width:820px) { .cards { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>고객 획득 비용(CAC) 계산기</h1>
+<p class="sub">같은 CAC를 세 가지 방법으로 계산하고 서로 맞는지 확인한다.</p>
+<div class="note">
+  <b>용어 연결 (매출 인수분해 식과 같음)</b><br>
+  유입 = 닿은 사람 수 × 관심 전환율 · 구매 = 유입 × 구매 전환율 · 신규 고객 = 구매 × 신규 고객 비율<br>
+  초기값은 모두 <b>설명용 가정</b>이다. 기준안은 검산 조건(광고비 60만 원, 유입 1,200건, 구매 전환율 2.5%, 전부 신규)과 같게 맞췄다.
+</div>
+
+<h2>입력과 세 가지 계산</h2>
+<div class="cards" id="cards"></div>
+
+<h2>세 안 비교</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>항목</th><th class="num">기준안</th><th class="num">유입만 많은 광고</th><th class="num">살 사람에게 좁힌 광고</th></tr></thead>
+  <tbody id="cmp"></tbody>
+</table>
+</div>
+<p class="note" id="rankLine"></p>
+
+<h2>검산</h2>
+<div class="verify" id="verify"></div>
+
+<footer>가정값은 학습용이며 실제 광고 성과가 아닙니다.</footer>
+</div>
+
+<script>
+const FIELDS = [
+  { k:'ad',      n:'광고비',            u:'원', step:10000, grp:'광고' },
+  { k:'reach',   n:'닿은 사람 수',       u:'명', step:1000,  grp:'매출 식 조각' },
+  { k:'intent',  n:'관심 전환율',        u:'%',  step:0.1 },
+  { k:'buy',     n:'구매 전환율',        u:'%',  step:0.1 },
+  { k:'newr',    n:'구매 중 신규 고객 비율', u:'%', step:1, grp:'고객' },
+  { k:'content', n:'콘텐츠 제작비',      u:'원', step:10000, grp:'광고비 밖의 비용' },
+  { k:'coupon',  n:'할인 쿠폰 비용',     u:'원', step:10000 },
+  { k:'labor',   n:'인건비',            u:'원', step:10000 }
+];
+// 설명용 가정 초기값
+const SC = [
+  { id:'base',   name:'기준안',              desc:'검산 조건과 같은 기준', v:{ ad:600000, reach:120000, intent:1,   buy:2.5, newr:100, content:300000, coupon:90000, labor:400000 } },
+  { id:'wide',   name:'유입만 많은 광고',     desc:'넓게 뿌려 유입은 많지만 살 사람 비중이 낮다', v:{ ad:600000, reach:240000, intent:1,   buy:1,   newr:100, content:300000, coupon:90000, labor:400000 } },
+  { id:'narrow', name:'살 사람에게 좁힌 광고', desc:'대상을 좁혀 유입은 적지만 살 사람 비중이 높다', v:{ ad:600000, reach:60000,  intent:1.5, buy:4,   newr:100, content:300000, coupon:90000, labor:400000 } }
+];
+
+const won = x => isFinite(x) ? Math.round(x).toLocaleString('ko-KR') + '원' : '계산 불가';
+const cnt = (x, u) => (Math.round(x*10)/10).toLocaleString('ko-KR') + u;
+const pct = x => (Math.round(x*100)/100).toLocaleString('ko-KR') + '%';
+
+function calc(v) {
+  const visits = v.reach * v.intent / 100;
+  const buyers = visits * v.buy / 100;
+  const news = buyers * v.newr / 100;
+  const cpv = visits > 0 ? v.ad / visits : Infinity;                 // 유입 1건당 비용
+  const cac1 = news > 0 ? v.ad / news : Infinity;                    // 정의대로
+  const conv = (v.buy / 100) * (v.newr / 100);                       // 유입 → 신규 고객 전환율
+  const cac2 = conv > 0 ? cpv / conv : Infinity;                     // 인수분해
+  const total = v.ad + v.content + v.coupon + v.labor;
+  const cac3 = news > 0 ? total / news : Infinity;                   // 범위 넓힌 CAC
+  return { visits, buyers, news, cpv, cac1, conv, cac2, total, cac3 };
+}
+
+function buildCards() {
+  document.getElementById('cards').innerHTML = SC.map(s => `
+    <div class="card" id="card-${s.id}">
+      <h3>${s.name}</h3><div class="desc">${s.desc}</div>
+      ${FIELDS.map(f => `${f.grp ? `<div class="grp">${f.grp}</div>` : ''}
+        <div class="in"><label for="${s.id}-${f.k}"><span>${f.n} <span class="badge">가정</span></span></label>
+          <div class="field"><input type="number" id="${s.id}-${f.k}" min="0" ${f.u==='%' ? 'max="100"' : ''} step="${f.step}" value="${s.v[f.k]}" inputmode="decimal"><span class="u">${f.u}</span></div></div>`).join('')}
+      <div class="calc" id="calc-${s.id}"></div>
+    </div>`).join('');
+  SC.forEach(s => FIELDS.forEach(f => document.getElementById(`${s.id}-${f.k}`).addEventListener('input', e => {
+    const x = parseFloat(e.target.value); s.v[f.k] = isFinite(x) && x >= 0 ? x : 0; render();
+  })));
+}
+
+function render() {
+  const R = SC.map(s => calc(s.v));
+  SC.forEach((s, i) => {
+    const v = s.v, r = R[i];
+    const same = isFinite(r.cac1) && isFinite(r.cac2) && Math.abs(r.cac1 - r.cac2) < 0.5;
+    document.getElementById('calc-' + s.id).innerHTML = `
+      <div class="step"><div class="t">준비: 유입과 신규 고객 수</div>
+        <div class="eq num">유입 = ${v.reach.toLocaleString('ko-KR')}명 × ${pct(v.intent)} = <b>${cnt(r.visits,'건')}</b></div>
+        <div class="eq num">구매 = ${cnt(r.visits,'건')} × ${pct(v.buy)} = <b>${cnt(r.buyers,'건')}</b></div>
+        <div class="eq num">신규 고객 = ${cnt(r.buyers,'건')} × ${pct(v.newr)} = <b>${cnt(r.news,'명')}</b></div></div>
+      <div class="step"><div class="t">① 정의대로</div>
+        <div class="eq num">광고비 ${won(v.ad)} ÷ 신규 고객 ${cnt(r.news,'명')}</div>
+        <div class="r num">= ${won(r.cac1)}</div></div>
+      <div class="step"><div class="t">② 인수분해</div>
+        <div class="eq num">유입 1건당 비용 = ${won(v.ad)} ÷ ${cnt(r.visits,'건')} = ${won(r.cpv)}</div>
+        <div class="eq num">유입 → 신규 전환율 = ${pct(v.buy)} × ${pct(v.newr)} = ${pct(r.conv*100)}</div>
+        <div class="eq num">${won(r.cpv)} ÷ ${pct(r.conv*100)}</div>
+        <div class="r num">= ${won(r.cac2)}</div>
+        <span class="match ${same ? 'ok' : 'bad'}">${same ? '✓ ①과 일치' : '✗ ①과 다름'}</span></div>
+      <div class="step"><div class="t">③ 범위 넓히기</div>
+        <div class="eq num">광고비만: ${won(r.cac1)}</div>
+        <div class="eq num">전체 비용 = ${won(v.ad)} + 콘텐츠 ${won(v.content)} + 쿠폰 ${won(v.coupon)} + 인건비 ${won(v.labor)} = ${won(r.total)}</div>
+        <div class="eq num">${won(r.total)} ÷ ${cnt(r.news,'명')}</div>
+        <div class="r num">= ${won(r.cac3)}</div>
+        <div class="eq num">광고비만 넣은 CAC의 ${isFinite(r.cac3/r.cac1) ? (r.cac3/r.cac1).toFixed(2) + '배' : '—'}</div></div>`;
+  });
+
+  // 순위 (낮을수록 좋음)
+  const rankOf = key => { const order = R.map((r,i)=>[r[key],i]).sort((a,b)=>a[0]-b[0]); const rk = []; order.forEach(([,i],j)=>rk[i]=j+1); return rk; };
+  const rCpv = rankOf('cpv'), rCac = rankOf('cac1'), rCac3 = rankOf('cac3');
+  const line = (name, key, fmt, eqf, rk) => `<tr><td>${name}</td>${R.map((r,i)=>`<td class="num ${rk && rk[i]===1 ? 'best' : ''}">${fmt(r[key])}${rk ? ` <span class="rank">(${rk[i]}위)</span>` : ''}${eqf ? `<span class="eq">${eqf(SC[i].v, r)}</span>` : ''}</td>`).join('')}</tr>`;
+  document.getElementById('cmp').innerHTML =
+    `<tr><td>광고비 (가정)</td>${SC.map(s=>`<td class="num">${won(s.v.ad)}</td>`).join('')}</tr>` +
+    line('유입 (가정)', 'visits', x=>cnt(x,'건'), (v)=>`${v.reach.toLocaleString('ko-KR')} × ${pct(v.intent)}`) +
+    line('유입 1건당 비용 (가정)', 'cpv', won, (v,r)=>`${won(v.ad)} ÷ ${cnt(r.visits,'건')}`, rCpv) +
+    line('신규 고객 (가정)', 'news', x=>cnt(x,'명'), (v,r)=>`${cnt(r.visits,'건')} × ${pct(v.buy)} × ${pct(v.newr)}`) +
+    line('CAC 광고비만 (가정)', 'cac1', won, (v,r)=>`${won(v.ad)} ÷ ${cnt(r.news,'명')}`, rCac) +
+    line('CAC 전체 비용 (가정)', 'cac3', won, (v,r)=>`${won(r.total)} ÷ ${cnt(r.news,'명')}`, rCac3);
+
+  const nm = i => SC[i].name;
+  const cheapVisit = rCpv.indexOf(1), cheapCac = rCac.indexOf(1), worstCac = rCac.indexOf(3);
+  document.getElementById('rankLine').innerHTML = cheapVisit === cheapCac
+    ? `유입 1건당 비용과 CAC 모두 <b>${nm(cheapVisit)}</b>이(가) 가장 싸다. 지금 값에서는 두 순위가 같다.`
+    : `유입 1건당 비용은 <b>${nm(cheapVisit)}</b>이(가) 가장 싸지만(${won(R[cheapVisit].cpv)}), CAC는 <b>${nm(cheapCac)}</b>이(가) 가장 싸다(${won(R[cheapCac].cac1)}). 유입이 싸도 그중 사는 사람이 적으면 고객 한 명을 얻는 비용은 오히려 비싸진다${cheapVisit === worstCac ? ` — ${nm(cheapVisit)}은(는) CAC가 꼴찌다` : ''}.`;
+
+  // 검산 (고정 조건)
+  const V = { ad:600000, visits:1200, buy:2.5, newr:100 };
+  const vb = V.visits * V.buy / 100, vn = vb * V.newr / 100;
+  const v1 = V.ad / vn, vcpv = V.ad / V.visits, v2 = vcpv / (V.buy/100 * V.newr/100);
+  const ok = Math.round(v1) === 20000 && Math.round(v2) === 20000;
+  document.getElementById('verify').innerHTML = `
+    조건: 광고비 600,000원 · 유입 1,200건 · 구매 전환율 2.5% · 신규 비율 100%<br>
+    ① ${won(V.ad)} ÷ (1,200건 × 2.5% × 100% = ${cnt(vn,'명')}) = <span class="r">${won(v1)}</span><br>
+    ② (${won(V.ad)} ÷ 1,200건 = ${won(vcpv)}) ÷ (2.5% × 100% = 2.5%) = <span class="r">${won(v2)}</span><br>
+    <span class="match ${ok ? 'ok' : 'bad'}">${ok ? '✓ 두 방법 모두 20,000원' : '✗ 20,000원이 아님'}</span>
+    · 위 기준안 카드도 같은 조건이라 ①·② 모두 ${won(R[0].cac1)}로 나온다.`;
+}
+
+buildCards();
+render();
+</script>
+</body>
+</html>
